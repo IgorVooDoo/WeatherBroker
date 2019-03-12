@@ -1,6 +1,6 @@
 <html>
 <body>
-<h2>Hello World!</h2>
+<h2>Погодный брокер (Администрирование)</h2>
 
 
 <form action="read" method="get">

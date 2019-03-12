@@ -4,7 +4,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import javax.inject.Inject;
-import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -17,7 +16,7 @@ import java.io.IOException;
  */
 @WebServlet(urlPatterns = "/read")
 public class RequestCity extends HttpServlet {
-    private final Logger log = LoggerFactory.getLogger(RequestCity.class);
+    private final Logger LOG = LoggerFactory.getLogger(RequestCity.class);
 
     @Inject
     private JmsSenderCity senderCity;
@@ -29,7 +28,7 @@ public class RequestCity extends HttpServlet {
         String city = req.getParameter("city");
         if(!city.isEmpty()){
             senderCity.sendMessage(req.getParameter("city"));
-            log.info("RequestCity (doGet) - > {}", req.getParameter("city"));
+            LOG.info("RequestCity (doGet) - > {}", req.getParameter("city"));
         }
     }
 }
