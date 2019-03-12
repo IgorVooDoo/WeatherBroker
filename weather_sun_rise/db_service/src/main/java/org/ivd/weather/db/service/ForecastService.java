@@ -24,8 +24,7 @@ public class ForecastService implements IForecastService {
         this.dao = dao;
     }
 
-    public ForecastService() {
-    }
+    public ForecastService(){}
 
     @Override
     @Transactional
@@ -38,7 +37,7 @@ public class ForecastService implements IForecastService {
         String city = forecast.getCity();
 
         ForecastEntity entity = getForecastAsEntity(forecast);
-        if (dao.isForecast(city, date)) {
+        if (dao.isForecastEmpty(city, date)) {
             dao.save(entity);
             LOG.info("Сохранили entity: {}", entity);
         } else {
@@ -51,7 +50,7 @@ public class ForecastService implements IForecastService {
         }
     }
 
-    private ForecastEntity getForecastAsEntity(Forecast forecast) throws Exception {
+    private ForecastEntity getForecastAsEntity(Forecast forecast) {
         ForecastEntity entity = new ForecastEntity();
         Date date = getDateFromString(forecast.getDate());
         entity.setDateForecast(date);
@@ -63,7 +62,6 @@ public class ForecastService implements IForecastService {
     }
 
     private Date getDateFromString(String date) {
-        Date dated = new Date(Long.parseLong(date) * 1000L);
-        return dated;
+        return new Date(Long.parseLong(date) * 1000L);
     }
 }

@@ -4,6 +4,7 @@ import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
+import java.io.Serializable;
 import java.util.Date;
 
 /**
@@ -11,7 +12,7 @@ import java.util.Date;
  */
 @Entity
 @Table(name = "forecast")
-public class ForecastEntity {
+public class ForecastEntity{
     @Id
     @GeneratedValue(generator = "hibseq")
     @GenericGenerator(name = "hibseq", strategy = "seqhilo")

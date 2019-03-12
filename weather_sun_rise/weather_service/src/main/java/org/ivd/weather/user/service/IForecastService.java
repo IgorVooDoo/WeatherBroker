@@ -10,9 +10,9 @@ public interface IForecastService {
     /**
      * Метод запроса данных о прогнозе погоды
      *
-     * @param req
+     * @param req Объект запроса
      * @return ForecastView
-     * @throws Exception
+     * @throws Exception Исключение
      */
     ForecastView getForecastByCityAndDate(ForecastReq req) throws Exception;
 

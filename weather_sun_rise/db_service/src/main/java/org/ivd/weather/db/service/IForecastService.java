@@ -7,8 +7,8 @@ public interface IForecastService {
     /**
      * Метод сохранения данных о погоде
      *
-     * @param msg
-     * @throws Exception
+     * @param msg JSON прогноза погоды
+     * @throws Exception Исключение
      */
     void save(String msg) throws Exception;
 

@@ -1,4 +1,4 @@
-package org.ivd.weather.yahoo;
+package org.ivd.weather.yahoo.service;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -32,21 +32,18 @@ public class JmsReceiverCity implements MessageListener {
         this.yahooSend = yahooSend;
     }
 
-    public JmsReceiverCity() {
-    }
-
     /**
      * Метод разбора JMS сообщения и передача в сервис для отправки в Yahoo API
      *
-     * @param message
+     * @param message В параметре хранится название города
      */
 
     @Override
     public void onMessage(Message message) {
-        String city = "";
+        String city;
         try {
             city = ((TextMessage) message).getText();
-            yahooSend.getData(city);
+            yahooSend.createAndSendMessage(city);
             LOG.info("JmsReceiverCity (onMessage) - > {}", city);
         } catch (JMSException | IOException ex) {
             throw new RuntimeException("JmsReceiverCity (JMSException | IOException) -> ", ex);

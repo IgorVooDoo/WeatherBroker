@@ -1,4 +1,4 @@
-package org.ivd.weather.yahoo;
+package org.ivd.weather.yahoo.service;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.ivd.weather.yahoo.model.Forecast;
@@ -21,12 +21,9 @@ import java.net.URL;
 import java.net.URLEncoder;
 import java.util.*;
 
-/**
- * Класс получения данных о погоде от сервиса Yahoo,
- * отправка данный в JMS очередь
- */
+
 @RequestScoped
-public class YahooSendMessage {
+public class YahooSendMessage implements IYahooSendMessage {
     private final Logger LOG = LoggerFactory.getLogger(YahooSendMessage.class);
 
     private static final String JMS_QUEUE_WEATHER = "java:jboss/queue/weatherQueue";
@@ -40,23 +37,23 @@ public class YahooSendMessage {
 
     private ObjectMapper objectMapper = new ObjectMapper();
 
-    public YahooSendMessage() {
+    YahooSendMessage() {
     }
 
-    public void getData(String city) throws Exception {
+    public void createAndSendMessage(String city) throws Exception {
 
-        if (city.isEmpty()) {
+        if (!city.isEmpty()) {
+            YahooResult result = getResultYahoo(city);
+            JMSContext context = connection.createContext();
+            JMSProducer producer = context.createProducer().setDeliveryMode(DeliveryMode.PERSISTENT);
+            List<Forecast> listForecast = getForecastForSend(result);
+            for (Forecast item : listForecast) {
+                String message = objectMapper.writeValueAsString(item);
+                producer.send(queue, message);
+                LOG.info("Send message: {}", message);
+            }
+        } else {
             throw new Exception("Наименование города не может быть NULL");
-        }
-        YahooResult result = getResultYahoo(city);
-        JMSContext context = connection.createContext();
-        JMSProducer producer = context.createProducer().setDeliveryMode(DeliveryMode.PERSISTENT);
-        List<Forecast> listForecast = getForecastForSend(result);
-
-        for (Forecast item : listForecast) {
-            String message = objectMapper.writeValueAsString(item);
-            producer.send(queue, message);
-            LOG.info("Send message: {}", message);
         }
     }
 
@@ -72,15 +69,14 @@ public class YahooSendMessage {
 
         BufferedReader in = new BufferedReader(new InputStreamReader(con.getInputStream()));
         String inputLine;
-        StringBuffer response = new StringBuffer();
+        StringBuilder response = new StringBuilder();
 
         while ((inputLine = in.readLine()) != null) {
             response.append(inputLine);
         }
         in.close();
 
-        YahooResult result = objectMapper.readValue(response.toString(), YahooResult.class);
-        return result;
+        return objectMapper.readValue(response.toString(), YahooResult.class);
     }
 
     private String getAuthorizationString(String city) throws IOException {
@@ -106,16 +102,16 @@ public class YahooSendMessage {
 
         Collections.sort(parameters);
 
-        StringBuffer parametersList = new StringBuffer();
+        StringBuilder parametersList = new StringBuilder();
         for (int i = 0; i < parameters.size(); i++) {
-            parametersList.append(((i > 0) ? "&" : "") + parameters.get(i));
+            parametersList.append((i > 0) ? "&" : "").append(parameters.get(i));
         }
 
         String signatureString = "GET&" +
                 URLEncoder.encode(url, "UTF-8") + "&" +
                 URLEncoder.encode(parametersList.toString(), "UTF-8");
 
-        String signature = null;
+        String signature;
         try {
             SecretKeySpec signingKey = new SecretKeySpec((consumerSecret + "&").getBytes(), "HmacSHA1");
             Mac mac = Mac.getInstance("HmacSHA1");
@@ -127,15 +123,13 @@ public class YahooSendMessage {
             throw new RuntimeException("YahooSendMessage (getAuthorizationString()) ->", e);
         }
 
-        String authorizationLine = "OAuth " +
+        return "OAuth " +
                 "oauth_consumer_key=\"" + consumerKey + "\"," +
                 "oauth_nonce=\"" + oauthNonce + "\"," +
                 "oauth_timestamp=\"" + timestamp + "\"," +
                 "oauth_signature_method=\"HMAC-SHA1\"," +
                 "oauth_signature=\"" + signature + "\"," +
                 "oauth_version=\"1.0\"";
-
-        return authorizationLine;
     }
 
     private List<Forecast> getForecastForSend(YahooResult result) {

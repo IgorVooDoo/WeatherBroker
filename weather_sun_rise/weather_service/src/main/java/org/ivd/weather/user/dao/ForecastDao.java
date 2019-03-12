@@ -18,8 +18,7 @@ public class ForecastDao implements IForecastDao {
         );
         query.setParameter("date", date);
         query.setParameter("city", city);
-        ForecastEntity entity = (ForecastEntity) query.getResultList().get(0);
-        return entity;
+        return (ForecastEntity) query.getResultList().get(0);
     }
 
 

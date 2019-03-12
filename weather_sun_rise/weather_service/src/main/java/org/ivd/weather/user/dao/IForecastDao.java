@@ -12,9 +12,9 @@ public interface IForecastDao {
     /**
      * Метод для получения данных о прогнозе погоды
      *
-     * @param date
-     * @param city
-     * @return
+     * @param date Дата
+     * @param city Город
+     * @return ForecastEntity
      */
     ForecastEntity findByCityDate(Date date, String city);
 }

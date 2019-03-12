@@ -1,6 +1,7 @@
 package org.ivd.weather.yahoo;
 
 import org.easymock.TestSubject;
+import org.ivd.weather.yahoo.service.YahooSendMessage;
 import org.junit.Test;
 
 /**
@@ -23,7 +24,7 @@ public class TestSendMessage {
 
     @Test(expected = Exception.class)
     public void testEmptyCity() throws Exception {
-        sendMessage.getData(cityEmpty);
+        sendMessage.createAndSendMessage(cityEmpty);
     }
 
     /**
@@ -34,7 +35,7 @@ public class TestSendMessage {
      */
     @Test(expected = Exception.class)
     public void testNullCity() throws Exception {
-        sendMessage.getData(cityNull);
+        sendMessage.createAndSendMessage(cityNull);
     }
 
 }

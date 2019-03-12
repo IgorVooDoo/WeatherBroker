@@ -3,10 +3,12 @@ package org.ivd.weather.user.controller;
 import org.ivd.weather.user.model.ForecastReq;
 import org.ivd.weather.user.service.IForecastService;
 import org.ivd.weather.user.view.ForecastView;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.SessionAttributes;
 import org.springframework.web.servlet.ModelAndView;
 
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
@@ -19,8 +21,6 @@ import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 @RequestMapping(value = "/api", produces = APPLICATION_JSON_VALUE)
 public class ForecastController {
 
-    private final org.slf4j.Logger log = LoggerFactory.getLogger(ForecastController.class);
-
     private IForecastService service;
 
     @Autowired
@@ -32,8 +32,8 @@ public class ForecastController {
     public ModelAndView getForecastReq(@ModelAttribute("data") ForecastReq req) {
         ModelAndView mv = new ModelAndView();
         mv.addObject("data", req);
-        mv.addObject("date", req.date);
-        mv.addObject("city", req.city);
+        mv.addObject("date", req.getDate());
+        mv.addObject("city", req.getCity());
         mv.setViewName("index");
         return mv;
     }

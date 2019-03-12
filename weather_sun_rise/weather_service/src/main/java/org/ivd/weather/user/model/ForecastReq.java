@@ -9,13 +9,8 @@ import java.util.Date;
  */
 public class ForecastReq {
     @DateTimeFormat(pattern = "yyyy-MM-dd")
-    public Date date;
-    public String city;
-
-    public ForecastReq(Date date, String city) {
-        this.date = date;
-        this.city = city;
-    }
+    private Date date;
+    private String city;
 
     public ForecastReq() {
     }

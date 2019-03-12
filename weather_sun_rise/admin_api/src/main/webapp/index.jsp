@@ -1,6 +1,7 @@
+<%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <html>
 <body>
-<h2>Погодный брокер (Администрирование)</h2>
+<h2>Weather Broker (Admin)</h2>
 
 
 <form action="read" method="get">

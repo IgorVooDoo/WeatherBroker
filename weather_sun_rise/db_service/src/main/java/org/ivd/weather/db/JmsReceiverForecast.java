@@ -36,10 +36,12 @@ public class JmsReceiverForecast implements MessageListener {
 
     @Override
     public void onMessage(Message message) {
-        String data = "";
+        String data;
         try {
             data = ((TextMessage) message).getText();
+
             service.save(data);
+            LOG.info("message -> {}", data);
         } catch (JMSException ex) {
             throw new RuntimeException("JmsReceiverForecast (JMSException) -> ", ex);
         } catch (Exception ex) {

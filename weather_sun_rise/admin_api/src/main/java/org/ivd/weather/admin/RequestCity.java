@@ -27,8 +27,8 @@ public class RequestCity extends HttpServlet {
                 .forward(req, resp);
         String city = req.getParameter("city");
         if (!city.isEmpty()) {
-            senderCity.sendMessage(req.getParameter("city"));
-            LOG.info("RequestCity (doGet) - > {}", req.getParameter("city"));
+            senderCity.sendMessage(city);
+            LOG.info("RequestCity (doGet) - > {}", city);
         }
     }
 }

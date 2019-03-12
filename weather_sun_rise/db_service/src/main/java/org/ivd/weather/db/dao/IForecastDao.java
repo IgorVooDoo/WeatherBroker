@@ -1,6 +1,7 @@
 package org.ivd.weather.db.dao;
 
 import org.ivd.weather.db.entity.ForecastEntity;
+import org.ivd.weather.db.model.Forecast;
 
 import java.util.Date;
 
@@ -11,15 +12,16 @@ public interface IForecastDao {
     /**
      * Метод сохранения прогноза погоды
      *
-     * @param entity
+     * @param entity Сущность Forecast
      */
     void save(ForecastEntity entity);
+
 
     /**
      * Метод обновления данных о прогнозе погоды,
      * если они уже существуют
      *
-     * @param entity
+     * @param entity Сущность Forecast
      */
     void update(ForecastEntity entity);
 
@@ -27,18 +29,19 @@ public interface IForecastDao {
      * Проверка наличия прогнозы погоды по названию города и
      * дате
      *
-     * @param city
-     * @param date
-     * @return
+     * @param city Название города
+     * @param date Дата
+     * @return boolean
      */
-    boolean isForecast(String city, Date date);
+    boolean isForecastEmpty(String city, Date date);
 
+   // ForecastEntity findByCityAndDate(String city,Date date);
     /**
      * Получение прогноза погоды для актуализации данных
      *
-     * @param city
-     * @param date
-     * @return
+     * @param city Название города
+     * @param date Дата
+     * @return ForecastEntity
      */
     ForecastEntity getByCityAndDate(String city, Date date);
 

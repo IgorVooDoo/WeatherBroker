@@ -26,15 +26,18 @@ public class JmsSenderCity {
     @Resource(name = JMS_CONNECTION_FACTORY_JNDI)
     private ConnectionFactory connection;
 
-    public JmsSenderCity() {
+    JmsSenderCity() {
     }
 
     /**
      * Создание и отправка сообщения с названием города
      *
-     * @param msg
+     * @param msg название города
      */
-    public void sendMessage(String msg) {
+    void sendMessage(String msg) {
+        if (msg.isEmpty()) {
+            throw new RuntimeException("Название города отсутствует");
+        }
         try {
             JMSContext context = connection.createContext();
             JMSProducer producer = context.createProducer();
