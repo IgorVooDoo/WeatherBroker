@@ -11,7 +11,7 @@ import java.util.Date;
 
 @RequestScoped
 public class ForecastDao implements IForecastDao {
-    private final Logger log = LoggerFactory.getLogger(ForecastDao.class);
+    private final Logger LOG = LoggerFactory.getLogger(ForecastDao.class);
 
     @PersistenceContext(unitName = "manager")
     private EntityManager em;
@@ -38,13 +38,6 @@ public class ForecastDao implements IForecastDao {
         entity = (ForecastEntity) query.getResultList().get(0);
 
         return entity;
-    }
-
-    @Override
-    public void find() {
-        javax.persistence.Query query = em.createQuery("select f from ForecastEntity f ");
-        log.info(query.getResultList().toString());
-
     }
 
     @Override

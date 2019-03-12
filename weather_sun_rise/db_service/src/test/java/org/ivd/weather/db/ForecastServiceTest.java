@@ -5,19 +5,15 @@ import org.easymock.Mock;
 import org.easymock.MockType;
 import org.easymock.TestSubject;
 import org.ivd.weather.db.dao.ForecastDao;
-import org.ivd.weather.db.model.Forecast;
 import org.ivd.weather.db.service.ForecastService;
 import org.junit.Rule;
 import org.junit.Test;
 
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.Locale;
+import static org.easymock.EasyMock.mock;
 
-import static org.easymock.EasyMock.*;
-
-
+/**
+ * Тесты для модуля db_service
+ */
 public class ForecastServiceTest {
 
     private String msgEmpty = "";
@@ -35,11 +31,19 @@ public class ForecastServiceTest {
     @TestSubject
     private ForecastService forecastService = new ForecastService(dao);
 
+    /**
+     * Проверка на попытку записать в базу значение NULL
+     * @throws Exception
+     */
     @Test(expected = Exception.class)
     public void saveNullTest() throws Exception {
         forecastService.save(msgNull);
     }
 
+    /**
+     * Проверка на запись пустого значения
+     * @throws Exception
+     */
     @Test(expected = Exception.class)
     public void saveEmptyTest() throws Exception {
         forecastService.save(msgEmpty);

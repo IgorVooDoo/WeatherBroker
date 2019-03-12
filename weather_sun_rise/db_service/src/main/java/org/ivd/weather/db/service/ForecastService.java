@@ -14,7 +14,7 @@ import java.util.Date;
 
 @RequestScoped
 public class ForecastService implements IForecastService {
-    private final Logger log = LoggerFactory.getLogger(ForecastService.class);
+    private final Logger LOG = LoggerFactory.getLogger(ForecastService.class);
     private ObjectMapper objectMapper = new ObjectMapper();
 
     private IForecastDao dao;
@@ -26,8 +26,6 @@ public class ForecastService implements IForecastService {
 
     public ForecastService() {
     }
-
-
 
     @Override
     @Transactional
@@ -42,14 +40,14 @@ public class ForecastService implements IForecastService {
         ForecastEntity entity = getForecastAsEntity(forecast);
         if (dao.isForecast(city, date)) {
             dao.save(entity);
-            log.info("Сохранили entity: {}", entity);
+            LOG.info("Сохранили entity: {}", entity);
         } else {
             ForecastEntity entityForUpdate = dao.getByCityAndDate(city, date);
             entityForUpdate.setHighTemp(entity.getHighTemp());
             entityForUpdate.setLowTemp(entity.getLowTemp());
             entityForUpdate.setDescription(entity.getDescription());
             dao.update(entityForUpdate);
-            log.info("Обновили entity: {}", entity);
+            LOG.info("Обновили entity: {}", entity);
         }
     }
 

@@ -1,5 +1,8 @@
 package org.ivd.weather.db.model;
 
+/**
+ * Модель данных из JMS сообщении
+ */
 public class Forecast {
     private String city;
     private String high;

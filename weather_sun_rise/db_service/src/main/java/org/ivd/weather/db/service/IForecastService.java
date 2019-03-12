@@ -1,9 +1,14 @@
 package org.ivd.weather.db.service;
 
 /**
- * TODO - JavaDoc
+ * Сервис для сохранения данных в базу
  */
 public interface IForecastService {
+    /**
+     * Метод сохранения данных о погоде
+     * @param msg
+     * @throws Exception
+     */
     void save(String msg) throws Exception;
 
 }

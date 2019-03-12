@@ -13,7 +13,8 @@ import javax.jms.MessageListener;
 import javax.jms.TextMessage;
 
 /**
- * TODO
+ * Класс для получения JMS сообщений из очереди прогноза погоды,
+ * разбора и записи данных в базу
  */
 @MessageDriven(name = "JmsReceiverForecast", activationConfig = {
         @ActivationConfigProperty(propertyName = "destinationLookup", propertyValue = "java:jboss/queue/weatherQueue"),
@@ -21,7 +22,7 @@ import javax.jms.TextMessage;
         @ActivationConfigProperty(propertyName = "acknowledgeMode", propertyValue = "Auto-acknowledge")
 })
 public class JmsReceiverForecast implements MessageListener {
-    private final Logger log = LoggerFactory.getLogger(JmsReceiverForecast.class);
+    private final Logger LOG = LoggerFactory.getLogger(JmsReceiverForecast.class);
 
     private IForecastService service;
 
@@ -40,11 +41,9 @@ public class JmsReceiverForecast implements MessageListener {
             data = ((TextMessage) message).getText();
             service.save(data);
         } catch (JMSException ex) {
-            log.error("JMSException ");
-            ex.printStackTrace();
+            throw new RuntimeException("JmsReceiverForecast (JMSException) -> ",ex);
         } catch (Exception ex){
-            log.error("Exception ");
-            ex.printStackTrace();
+            throw new RuntimeException("JmsReceiverForecast (Exception) -> ",ex);
         }
     }
 }
