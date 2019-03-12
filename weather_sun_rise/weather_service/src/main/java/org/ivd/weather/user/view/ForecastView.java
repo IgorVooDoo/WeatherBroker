@@ -2,6 +2,9 @@ package org.ivd.weather.user.view;
 
 import java.util.Date;
 
+/**
+ * Представление объекта прогноза погоды
+ */
 public class ForecastView {
     private Date date;
     private String city;

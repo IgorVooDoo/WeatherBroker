@@ -4,6 +4,9 @@ import org.springframework.format.annotation.DateTimeFormat;
 
 import java.util.Date;
 
+/**
+ * Модель для параметров запроса
+ */
 public class ForecastReq {
     @DateTimeFormat(pattern = "yyyy-MM-dd")
     public Date date;

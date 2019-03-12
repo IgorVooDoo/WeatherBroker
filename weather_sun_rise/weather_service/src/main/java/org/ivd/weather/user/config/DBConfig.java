@@ -17,6 +17,9 @@ import org.springframework.transaction.jta.JtaTransactionManager;
 import javax.naming.NamingException;
 import javax.sql.DataSource;
 
+/**
+ * Конфигурация для подключения к базе данных
+ */
 @Configuration
 @EnableTransactionManagement
 @PropertySource("classpath:persistence-jndi.properties")
@@ -26,6 +29,7 @@ public class DBConfig {
 
     @Autowired
     private Environment env;
+
 
     @Bean
     public LocalContainerEntityManagerFactoryBean entityManagerFactory() throws NamingException {

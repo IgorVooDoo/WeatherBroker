@@ -2,6 +2,9 @@ package org.ivd.weather.user.config;
 
 import org.springframework.web.servlet.support.AbstractAnnotationConfigDispatcherServletInitializer;
 
+/**
+ * Конфигурация приложения
+ */
 public class ServiceConfig extends AbstractAnnotationConfigDispatcherServletInitializer {
 
     protected Class<?>[] getRootConfigClasses() {

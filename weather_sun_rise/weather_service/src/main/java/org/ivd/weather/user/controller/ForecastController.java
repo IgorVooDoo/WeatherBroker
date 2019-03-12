@@ -11,6 +11,9 @@ import org.springframework.web.servlet.ModelAndView;
 
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 
+/**
+ * Сервис для получения и обработки запросов
+ */
 @Controller
 @SessionAttributes(value = "data")
 @RequestMapping(value = "/api", produces = APPLICATION_JSON_VALUE)
@@ -54,11 +57,6 @@ public class ForecastController {
         }
         return mv;
     }
-
-   /* @RequestMapping(value = "/error")
-    public String getForecast(@RequestBody ForecastReq req) throws Exception{
-        return service.getForecastByCityAndDate(req);
-    }*/
 
     @RequestMapping(value = "ping", method = RequestMethod.GET)
     public String ping() {

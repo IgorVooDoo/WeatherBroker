@@ -6,8 +6,8 @@ import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import java.util.Date;
 
-/**forecast
- * TODO - Добавить описание класса
+/**
+ * Сущность для связи с таблицей прогноза погоды
  */
 @Entity
 @Table(name = "forecast")

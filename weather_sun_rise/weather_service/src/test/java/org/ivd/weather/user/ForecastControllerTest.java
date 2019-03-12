@@ -22,11 +22,14 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
+/**
+ * Тесты для модуля weather_service
+ */
 @RunWith(SpringRunner.class)
 @ContextConfiguration(classes = {ServiceConfig.class})
 @WebAppConfiguration
 public class ForecastControllerTest {
-    private final Logger log = LoggerFactory.getLogger(ForecastControllerTest.class);
+    private final Logger LOG = LoggerFactory.getLogger(ForecastControllerTest.class);
 
     @Rule
     public EasyMockRule mockRule = new EasyMockRule(this);
@@ -40,6 +43,10 @@ public class ForecastControllerTest {
         mockMvc = MockMvcBuilders.standaloneSetup(new ForecastController(mockForecastService)).build();
     }
 
+    /**
+     * Тест на получение данных из базы
+     * @throws Exception
+     */
     @Test
     public void testGetWeatherCityDate() throws Exception {
         mockMvc.perform(get("/api/weather/submit")
