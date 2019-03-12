@@ -1,6 +1,6 @@
 package org.ivd.weather.user.entity;
 
-import org.hibernate.annotations.GenericGenerator;
+//import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
@@ -14,7 +14,6 @@ import java.util.Date;
 public class ForecastEntity {
     @Id
     @GeneratedValue(generator = "hibseq")
-    @GenericGenerator(name = "hibseq", strategy = "seqhilo")
     @Column(name = "id")
     private Long id;
     @Version
