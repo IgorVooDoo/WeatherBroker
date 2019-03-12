@@ -62,8 +62,8 @@ public class ForecastService implements IForecastService {
         return entity;
     }
 
-    private Date getDateFromString(String date){
-        Date dated = new Date(Long.parseLong(date)*1000L);
+    private Date getDateFromString(String date) {
+        Date dated = new Date(Long.parseLong(date) * 1000L);
         return dated;
     }
 }

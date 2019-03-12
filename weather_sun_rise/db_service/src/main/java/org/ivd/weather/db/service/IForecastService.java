@@ -6,6 +6,7 @@ package org.ivd.weather.db.service;
 public interface IForecastService {
     /**
      * Метод сохранения данных о погоде
+     *
      * @param msg
      * @throws Exception
      */

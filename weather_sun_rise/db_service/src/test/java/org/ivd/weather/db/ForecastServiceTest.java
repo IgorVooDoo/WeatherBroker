@@ -19,7 +19,7 @@ public class ForecastServiceTest {
     private String msgEmpty = "";
     private String msgNull = null;
 
-    public ForecastServiceTest(){
+    public ForecastServiceTest() {
     }
 
     @Rule
@@ -33,6 +33,7 @@ public class ForecastServiceTest {
 
     /**
      * Проверка на попытку записать в базу значение NULL
+     *
      * @throws Exception
      */
     @Test(expected = Exception.class)
@@ -42,6 +43,7 @@ public class ForecastServiceTest {
 
     /**
      * Проверка на запись пустого значения
+     *
      * @throws Exception
      */
     @Test(expected = Exception.class)

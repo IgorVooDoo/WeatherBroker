@@ -12,8 +12,9 @@ import java.util.Date;
 @Entity
 @Table(name = "forecast")
 public class ForecastEntity {
-    @Id @GeneratedValue(generator="hibseq")
-    @GenericGenerator(name="hibseq", strategy = "seqhilo")
+    @Id
+    @GeneratedValue(generator = "hibseq")
+    @GenericGenerator(name = "hibseq", strategy = "seqhilo")
     @Column(name = "id")
     private Long id;
     @Version

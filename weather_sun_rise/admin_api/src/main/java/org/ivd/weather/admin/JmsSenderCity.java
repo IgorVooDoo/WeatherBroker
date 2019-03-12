@@ -35,12 +35,12 @@ public class JmsSenderCity {
      * @param msg
      */
     public void sendMessage(String msg) {
-        try{
+        try {
             JMSContext context = connection.createContext();
             JMSProducer producer = context.createProducer();
             producer.send(queue, msg);
             LOG.info("JmsSenderCity (sendMessage)-> {}", msg);
-        }catch (Exception ex){
+        } catch (Exception ex) {
             throw new RuntimeException("sendMessage error -> ", ex);
         }
 

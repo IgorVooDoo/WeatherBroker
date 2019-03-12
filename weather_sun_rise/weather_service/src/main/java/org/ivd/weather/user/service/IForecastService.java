@@ -9,6 +9,7 @@ import org.ivd.weather.user.view.ForecastView;
 public interface IForecastService {
     /**
      * Метод запроса данных о прогнозе погоды
+     *
      * @param req
      * @return ForecastView
      * @throws Exception

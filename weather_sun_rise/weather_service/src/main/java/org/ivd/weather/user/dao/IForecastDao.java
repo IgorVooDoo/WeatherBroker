@@ -1,7 +1,6 @@
 package org.ivd.weather.user.dao;
 
 
-
 import org.ivd.weather.user.entity.ForecastEntity;
 
 import java.util.Date;
@@ -12,6 +11,7 @@ import java.util.Date;
 public interface IForecastDao {
     /**
      * Метод для получения данных о прогнозе погоды
+     *
      * @param date
      * @param city
      * @return

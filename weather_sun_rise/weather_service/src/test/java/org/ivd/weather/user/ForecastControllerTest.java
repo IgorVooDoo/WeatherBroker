@@ -39,12 +39,13 @@ public class ForecastControllerTest {
     private ForecastService mockForecastService = mock(ForecastService.class);
 
     @Before
-    public void ForecastControllerTest(){
+    public void ForecastControllerTest() {
         mockMvc = MockMvcBuilders.standaloneSetup(new ForecastController(mockForecastService)).build();
     }
 
     /**
      * Тест на получение данных из базы
+     *
      * @throws Exception
      */
     @Test

@@ -17,21 +17,23 @@ public class TestSendMessage {
     /**
      * Проверка запроса данных о погоде при пустом значении
      * названия города
+     *
      * @throws Exception
      */
 
     @Test(expected = Exception.class)
-    public void testEmptyCity()throws Exception{
+    public void testEmptyCity() throws Exception {
         sendMessage.getData(cityEmpty);
     }
 
     /**
      * Проверка запроса данных о погоде при значении названия
      * города NULL
+     *
      * @throws Exception
      */
     @Test(expected = Exception.class)
-    public void testNullCity()throws Exception{
+    public void testNullCity() throws Exception {
         sendMessage.getData(cityNull);
     }
 

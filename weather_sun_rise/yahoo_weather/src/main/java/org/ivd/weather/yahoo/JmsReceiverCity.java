@@ -37,6 +37,7 @@ public class JmsReceiverCity implements MessageListener {
 
     /**
      * Метод разбора JMS сообщения и передача в сервис для отправки в Yahoo API
+     *
      * @param message
      */
 
@@ -48,9 +49,9 @@ public class JmsReceiverCity implements MessageListener {
             yahooSend.getData(city);
             LOG.info("JmsReceiverCity (onMessage) - > {}", city);
         } catch (JMSException | IOException ex) {
-            throw new RuntimeException("JmsReceiverCity (JMSException | IOException) -> ",ex);
+            throw new RuntimeException("JmsReceiverCity (JMSException | IOException) -> ", ex);
         } catch (Exception ex) {
-            throw new RuntimeException("JmsReceiverCity (Exception) -> ",ex);
+            throw new RuntimeException("JmsReceiverCity (Exception) -> ", ex);
         }
     }
 }

@@ -8,7 +8,7 @@ import javax.persistence.PersistenceContext;
 import java.util.Date;
 
 @Repository
-public class ForecastDao implements IForecastDao{
+public class ForecastDao implements IForecastDao {
     @PersistenceContext
     private EntityManager em;
 

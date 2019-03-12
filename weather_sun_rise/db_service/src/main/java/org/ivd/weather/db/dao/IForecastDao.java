@@ -10,6 +10,7 @@ import java.util.Date;
 public interface IForecastDao {
     /**
      * Метод сохранения прогноза погоды
+     *
      * @param entity
      */
     void save(ForecastEntity entity);
@@ -17,6 +18,7 @@ public interface IForecastDao {
     /**
      * Метод обновления данных о прогнозе погоды,
      * если они уже существуют
+     *
      * @param entity
      */
     void update(ForecastEntity entity);
@@ -24,6 +26,7 @@ public interface IForecastDao {
     /**
      * Проверка наличия прогнозы погоды по названию города и
      * дате
+     *
      * @param city
      * @param date
      * @return
@@ -32,6 +35,7 @@ public interface IForecastDao {
 
     /**
      * Получение прогноза погоды для актуализации данных
+     *
      * @param city
      * @param date
      * @return

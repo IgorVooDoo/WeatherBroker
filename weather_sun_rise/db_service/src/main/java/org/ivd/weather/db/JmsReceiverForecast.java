@@ -41,9 +41,9 @@ public class JmsReceiverForecast implements MessageListener {
             data = ((TextMessage) message).getText();
             service.save(data);
         } catch (JMSException ex) {
-            throw new RuntimeException("JmsReceiverForecast (JMSException) -> ",ex);
-        } catch (Exception ex){
-            throw new RuntimeException("JmsReceiverForecast (Exception) -> ",ex);
+            throw new RuntimeException("JmsReceiverForecast (JMSException) -> ", ex);
+        } catch (Exception ex) {
+            throw new RuntimeException("JmsReceiverForecast (Exception) -> ", ex);
         }
     }
 }

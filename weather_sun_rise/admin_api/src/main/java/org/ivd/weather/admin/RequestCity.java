@@ -26,7 +26,7 @@ public class RequestCity extends HttpServlet {
         req.getRequestDispatcher("index.jsp")
                 .forward(req, resp);
         String city = req.getParameter("city");
-        if(!city.isEmpty()){
+        if (!city.isEmpty()) {
             senderCity.sendMessage(req.getParameter("city"));
             LOG.info("RequestCity (doGet) - > {}", req.getParameter("city"));
         }

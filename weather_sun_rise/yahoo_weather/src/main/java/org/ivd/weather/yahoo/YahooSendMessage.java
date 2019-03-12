@@ -124,7 +124,7 @@ public class YahooSendMessage {
             Base64.Encoder encoder = Base64.getEncoder();
             signature = encoder.encodeToString(rawHMAC);
         } catch (Exception e) {
-            throw new RuntimeException("YahooSendMessage (getAuthorizationString()) ->",e);
+            throw new RuntimeException("YahooSendMessage (getAuthorizationString()) ->", e);
         }
 
         String authorizationLine = "OAuth " +

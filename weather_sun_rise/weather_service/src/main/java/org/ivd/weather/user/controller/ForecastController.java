@@ -51,7 +51,7 @@ public class ForecastController {
         try {
             mv.setViewName("forecast");
             forecastView = service.getForecastByCityAndDate(req);
-            mv.addObject("forecastView",forecastView);
+            mv.addObject("forecastView", forecastView);
         } catch (Exception ex) {
             mv.setViewName("error");
         }
