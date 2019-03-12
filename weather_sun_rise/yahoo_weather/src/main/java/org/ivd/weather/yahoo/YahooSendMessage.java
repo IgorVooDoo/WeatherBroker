@@ -27,7 +27,7 @@ import java.util.*;
  */
 @RequestScoped
 public class YahooSendMessage {
-    private final Logger log = LoggerFactory.getLogger(YahooSendMessage.class);
+    private final Logger LOG = LoggerFactory.getLogger(YahooSendMessage.class);
 
     private static final String JMS_QUEUE_WEATHER = "java:jboss/queue/weatherQueue";
     private static final String JMS_CONNECTION_FACTORY_JNDI = "java:comp/DefaultJMSConnectionFactory";//"java:jboss/DefaultJMSConnectionFactory";
@@ -49,7 +49,6 @@ public class YahooSendMessage {
             throw new Exception("Наименование города не может быть NULL");
         }
         YahooResult result = getResultYahoo(city);
-        System.out.println(Arrays.toString(result.getForecasts()));
         JMSContext context = connection.createContext();
         JMSProducer producer = context.createProducer().setDeliveryMode(DeliveryMode.PERSISTENT);
         List<Forecast> listForecast = getForecastForSend(result);
@@ -57,15 +56,14 @@ public class YahooSendMessage {
         for (Forecast item : listForecast) {
             String message = objectMapper.writeValueAsString(item);
             producer.send(queue, message);
-            log.info("Send message: {}", message);
+            LOG.info("Send message: {}", message);
         }
     }
 
     private YahooResult getResultYahoo(String city) throws IOException {
         String url = "https://weather-ydn-yql.media.yahoo.com/forecastrss?location=" + city + "&format=json&u=c";
         String authorizationLine = getAuthorizationString(city);
-        //String authorizationLine = "OAuth oauth_consumer_key=\"dj0yJmk9S3JuM2xQWTV5TWNlJnM9Y29uc3VtZXJzZWNyZXQmc3Y9MCZ4PWM4\",oauth_signature_method=\"HMAC-SHA1\",oauth_timestamp=\"1551940602\",oauth_nonce=\"B5FRdttZarD\",oauth_version=\"1.0\",oauth_signature=\"HMY5AOkRhy7%2FA5RTUjpNvnNwMuw%3D\"";
-        log.info("authorizationLine - > {}", authorizationLine);
+        LOG.info("authorizationLine - > {}", authorizationLine);
         URL obj = new URL(url);
 
         HttpURLConnection con = (HttpURLConnection) obj.openConnection();
@@ -102,7 +100,6 @@ public class YahooSendMessage {
         parameters.add("oauth_signature_method=HMAC-SHA1");
         parameters.add("oauth_timestamp=" + timestamp);
         parameters.add("oauth_version=1.0");
-        // Make sure value is encoded
         parameters.add("location=" + URLEncoder.encode(city, "UTF-8"));
         parameters.add("format=json");
         parameters.add("u=c");
@@ -127,8 +124,7 @@ public class YahooSendMessage {
             Base64.Encoder encoder = Base64.getEncoder();
             signature = encoder.encodeToString(rawHMAC);
         } catch (Exception e) {
-            System.err.println("Unable to append signature");
-            System.exit(0);
+            throw new RuntimeException("YahooSendMessage (getAuthorizationString()) ->",e);
         }
 
         String authorizationLine = "OAuth " +

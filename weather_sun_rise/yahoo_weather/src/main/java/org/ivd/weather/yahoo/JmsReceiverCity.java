@@ -23,7 +23,7 @@ import java.io.IOException;
 })
 public class JmsReceiverCity implements MessageListener {
 
-    private final Logger log = LoggerFactory.getLogger(JmsReceiverCity.class);
+    private final Logger LOG = LoggerFactory.getLogger(JmsReceiverCity.class);
 
     private YahooSendMessage yahooSend;
 
@@ -46,13 +46,11 @@ public class JmsReceiverCity implements MessageListener {
         try {
             city = ((TextMessage) message).getText();
             yahooSend.getData(city);
-            log.info("JmsReceiverCity (onMessage) - > {}", city);
+            LOG.info("JmsReceiverCity (onMessage) - > {}", city);
         } catch (JMSException | IOException ex) {
-            log.error("JMSException | IOException ");
-            ex.printStackTrace();
+            throw new RuntimeException("JmsReceiverCity (JMSException | IOException) -> ",ex);
         } catch (Exception ex) {
-            log.error("Exception");
-            ex.printStackTrace();
+            throw new RuntimeException("JmsReceiverCity (Exception) -> ",ex);
         }
     }
 }
