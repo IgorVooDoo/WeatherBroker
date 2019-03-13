@@ -1,11 +1,25 @@
-package org.ivd.weather.yahoo.model;
+package org.ivd.weather.tools.model;
 
+/**
+ * Модель данных из JMS сообщении
+ */
 public class Forecast {
     private String city;
     private String high;
     private String low;
     private String text;
     private String date;
+
+    public Forecast(String city, String high, String low, String text, String date) {
+        this.city = city;
+        this.high = high;
+        this.low = low;
+        this.text = text;
+        this.date = date;
+    }
+
+    public Forecast() {
+    }
 
     public String getCity() {
         return city;

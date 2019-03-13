@@ -1,7 +1,7 @@
 package org.ivd.weather.yahoo.service;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import org.ivd.weather.yahoo.model.Forecast;
+import org.ivd.weather.tools.model.Forecast;
 import org.ivd.weather.yahoo.model.YahooForecast;
 import org.ivd.weather.yahoo.model.YahooResult;
 import org.slf4j.Logger;
@@ -37,7 +37,7 @@ public class YahooSendMessage implements IYahooSendMessage {
 
     private ObjectMapper objectMapper = new ObjectMapper();
 
-    YahooSendMessage() {
+    public YahooSendMessage() {
     }
 
     public void createAndSendMessage(String city) throws Exception {

@@ -3,7 +3,7 @@ package org.ivd.weather.db.service;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.ivd.weather.db.dao.IForecastDao;
 import org.ivd.weather.db.entity.ForecastEntity;
-import org.ivd.weather.db.model.Forecast;
+import org.ivd.weather.tools.model.Forecast;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

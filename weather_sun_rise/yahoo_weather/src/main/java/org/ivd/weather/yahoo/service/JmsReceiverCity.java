@@ -32,6 +32,9 @@ public class JmsReceiverCity implements MessageListener {
         this.yahooSend = yahooSend;
     }
 
+    public JmsReceiverCity() {
+    }
+
     /**
      * Метод разбора JMS сообщения и передача в сервис для отправки в Yahoo API
      *

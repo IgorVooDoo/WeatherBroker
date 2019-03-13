@@ -1,7 +1,6 @@
 package org.ivd.weather.db.dao;
 
 import org.ivd.weather.db.entity.ForecastEntity;
-import org.ivd.weather.db.model.Forecast;
 
 import java.util.Date;
 
