@@ -2,6 +2,7 @@ package org.ivd.weather.user.controller;
 
 import org.ivd.weather.user.model.ForecastReq;
 import org.ivd.weather.user.service.IForecastService;
+import org.ivd.weather.user.view.ErrorView;
 import org.ivd.weather.user.view.ForecastView;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -56,7 +57,7 @@ public class ForecastController {
             mv.addObject("forecastView", forecastView);
         } catch (Exception ex) {
             mv.setViewName("error");
-            throw new RuntimeException("ModelAndView getForecast -> ",ex);
+            mv.addObject("errorView",new ErrorView(ex.getMessage()));
         }
         return mv;
     }
