@@ -2,6 +2,9 @@ package org.ivd.weather.yahoo.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
+/**
+ * Класс для разбора JSON полученного от сервиса Yahoo Weather API
+ */
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class YahooForecast {
     private String date;

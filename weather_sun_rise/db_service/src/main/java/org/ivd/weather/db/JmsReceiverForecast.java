@@ -31,6 +31,9 @@ public class JmsReceiverForecast implements MessageListener {
         this.service = service;
     }
 
+    /**
+     * Обязательный конструктор без параметров
+     */
     public JmsReceiverForecast() {
     }
 

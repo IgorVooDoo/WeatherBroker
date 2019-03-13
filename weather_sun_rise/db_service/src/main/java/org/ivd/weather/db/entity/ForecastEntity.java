@@ -12,25 +12,46 @@ import java.util.Date;
 @Entity
 @Table(name = "forecast")
 public class ForecastEntity{
+    /**
+     * Идетификационный номер
+     */
     @Id
     @GeneratedValue(generator = "hibseq")
     @GenericGenerator(name = "hibseq", strategy = "seqhilo")
     @Column(name = "id")
     private Long id;
+    /**
+     * Версия
+     */
     @Version
     private Integer version;
+    /**
+     * Дата прогноза
+     */
     @NotNull
     @Column(name = "dateforecast")
     private Date dateForecast;
+    /**
+     * Название города
+     */
     @NotNull
     @Column(name = "city")
     private String city;
+    /**
+     * Максимальная температура
+     */
     @NotNull
     @Column(name = "hightemp")
     private String highTemp;
+    /**
+     * Минимальная температура
+     */
     @NotNull
     @Column(name = "lowtemp")
     private String lowTemp;
+    /**
+     * Описание
+     */
     @NotNull
     @Column(name = "description")
     private String description;
