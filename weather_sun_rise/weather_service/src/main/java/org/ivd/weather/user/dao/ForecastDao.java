@@ -5,6 +5,10 @@ import org.springframework.stereotype.Repository;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Predicate;
+import javax.persistence.criteria.Root;
 import java.util.Date;
 
 @Repository
@@ -13,13 +17,19 @@ public class ForecastDao implements IForecastDao {
     private EntityManager em;
 
     public ForecastEntity findByCityDate(Date date, String city) {
-        javax.persistence.Query query = em.createQuery(
-                "select f from ForecastEntity f where f.dateForecast =:date  and f.city =:city"
-        );
-        query.setParameter("date", date);
-        query.setParameter("city", city);
-        return (ForecastEntity) query.getResultList().get(0);
+        if (date == null || city.isEmpty()) {
+            throw new RuntimeException("Отсутствует значение даты или города");
+        }
+        CriteriaBuilder criteriaBuilder = em.getCriteriaBuilder();
+        CriteriaQuery<ForecastEntity> criteriaQuery = criteriaBuilder.createQuery(ForecastEntity.class);
+        Root<ForecastEntity> root = criteriaQuery.from(ForecastEntity.class);
+        criteriaQuery.select(root);
+        Predicate predicate = criteriaBuilder.conjunction();
+        Predicate datePredicate = criteriaBuilder.equal(root.get("dateForecast"), date);
+        predicate = criteriaBuilder.and(predicate, datePredicate);
+        Predicate cityPredicate = criteriaBuilder.equal(root.get("city"), city);
+        predicate = criteriaBuilder.and(predicate, cityPredicate);
+        criteriaQuery.where(predicate);
+        return em.createQuery(criteriaQuery).getSingleResult();
     }
-
-
 }

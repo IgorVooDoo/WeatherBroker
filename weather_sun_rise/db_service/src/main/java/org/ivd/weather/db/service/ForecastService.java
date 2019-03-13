@@ -41,7 +41,7 @@ public class ForecastService implements IForecastService {
             dao.save(entity);
             LOG.info("Сохранили entity: {}", entity);
         } else {
-            ForecastEntity entityForUpdate = dao.getByCityAndDate(city, date);
+            ForecastEntity entityForUpdate = dao.findByCityAndDate(city, date);
             entityForUpdate.setHighTemp(entity.getHighTemp());
             entityForUpdate.setLowTemp(entity.getLowTemp());
             entityForUpdate.setDescription(entity.getDescription());

@@ -3,6 +3,8 @@ package org.ivd.weather.user.controller;
 import org.ivd.weather.user.model.ForecastReq;
 import org.ivd.weather.user.service.IForecastService;
 import org.ivd.weather.user.view.ForecastView;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -20,7 +22,7 @@ import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 @SessionAttributes(value = "data")
 @RequestMapping(value = "/api", produces = APPLICATION_JSON_VALUE)
 public class ForecastController {
-
+    private final Logger LOG = LoggerFactory.getLogger(ForecastController.class);
     private IForecastService service;
 
     @Autowired
@@ -46,7 +48,7 @@ public class ForecastController {
     @RequestMapping(value = "/weather/submit", method = RequestMethod.GET)
     public ModelAndView getForecast(@ModelAttribute("data") ForecastReq req) {
         ModelAndView mv = new ModelAndView();
-
+        LOG.info("В методе GET Submit");
         ForecastView forecastView;
         try {
             mv.setViewName("forecast");
@@ -54,6 +56,7 @@ public class ForecastController {
             mv.addObject("forecastView", forecastView);
         } catch (Exception ex) {
             mv.setViewName("error");
+            throw new RuntimeException("ModelAndView getForecast -> ",ex);
         }
         return mv;
     }

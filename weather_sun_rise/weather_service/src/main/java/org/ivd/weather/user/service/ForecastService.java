@@ -19,9 +19,9 @@ public class ForecastService implements IForecastService {
     }
 
     @Transactional
-    public ForecastView getForecastByCityAndDate(ForecastReq req) throws Exception {
-        if (req == null) {
-            throw new Exception("Empty request");
+    public ForecastView getForecastByCityAndDate(ForecastReq req) {
+        if (req.getDate() == null || req.getCity().isEmpty()) {
+            throw new RuntimeException("Отсутствует значение даты или города");
         }
         ForecastEntity entity = dao.findByCityDate(req.getDate(), req.getCity());
         return generateViewFromEntity(entity);

@@ -34,7 +34,7 @@ public interface IForecastDao {
      */
     boolean isForecastEmpty(String city, Date date);
 
-   // ForecastEntity findByCityAndDate(String city,Date date);
+
     /**
      * Получение прогноза погоды для актуализации данных
      *
@@ -42,6 +42,7 @@ public interface IForecastDao {
      * @param date Дата
      * @return ForecastEntity
      */
-    ForecastEntity getByCityAndDate(String city, Date date);
+    ForecastEntity findByCityAndDate(String city, Date date);
 
 }
+
