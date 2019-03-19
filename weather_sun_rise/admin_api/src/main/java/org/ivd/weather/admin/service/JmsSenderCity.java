@@ -1,4 +1,4 @@
-package org.ivd.weather.admin;
+package org.ivd.weather.admin.service;
 
 import org.ivd.weather.error.exception.WeatherException;
 import org.slf4j.Logger;
@@ -27,15 +27,12 @@ public class JmsSenderCity {
     @Resource(name = JMS_CONNECTION_FACTORY_JNDI)
     private ConnectionFactory connection;
 
-    JmsSenderCity() {
-    }
-
     /**
      * Создание и отправка сообщения с названием города
      *
      * @param msg название города
      */
-    void sendMessage(String msg) throws WeatherException {
+    public void sendMessage(String msg) throws WeatherException {
         if (msg.isEmpty()) {
             throw new WeatherException("Название города отсутствует");
         }
@@ -47,6 +44,5 @@ public class JmsSenderCity {
         } catch (Exception ex) {
             throw new RuntimeException("sendMessage error -> ", ex);
         }
-
     }
 }

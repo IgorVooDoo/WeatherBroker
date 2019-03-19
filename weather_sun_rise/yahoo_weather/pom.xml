@@ -29,7 +29,7 @@
 
         <dependency>
             <groupId>com.good.weather</groupId>
-            <artifactId>common_tools</artifactId>
+            <artifactId>message_service</artifactId>
             <version>1.0-SNAPSHOT</version>
             <scope>compile</scope>
         </dependency>

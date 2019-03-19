@@ -1,6 +1,8 @@
 package org.ivd.weather.admin;
 
 import org.easymock.TestSubject;
+import org.ivd.weather.admin.service.JmsSenderCity;
+import org.ivd.weather.error.exception.WeatherException;
 import org.junit.Test;
 
 /**
@@ -19,7 +21,7 @@ public class AdminApiTest {
      * @throws Exception
      */
     @Test(expected = Exception.class)
-    public void testEmptyCity() {
+    public void testEmptyCity() throws WeatherException {
         senderCity.sendMessage(cityEmpty);
     }
 
@@ -29,7 +31,7 @@ public class AdminApiTest {
      * @throws Exception
      */
     @Test(expected = Exception.class)
-    public void testNullCity() {
+    public void testNullCity() throws WeatherException {
         senderCity.sendMessage(cityNull);
     }
 }
