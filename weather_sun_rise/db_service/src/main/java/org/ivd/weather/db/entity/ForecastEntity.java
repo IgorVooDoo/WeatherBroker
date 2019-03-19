@@ -35,25 +35,25 @@ public class ForecastEntity{
      * Название города
      */
     @NotNull
-    @Column(name = "city")
+    @Column(name = "city", length = 100)
     private String city;
     /**
      * Максимальная температура
      */
     @NotNull
-    @Column(name = "hightemp")
+    @Column(name = "hightemp", length = 10)
     private String highTemp;
     /**
      * Минимальная температура
      */
     @NotNull
-    @Column(name = "lowtemp")
+    @Column(name = "lowtemp", length = 10)
     private String lowTemp;
     /**
      * Описание
      */
     @NotNull
-    @Column(name = "description")
+    @Column(name = "description", length = 50)
     private String description;
 
     public ForecastEntity(Date dateForecast, String city, String highTemp, String lowTemp, String description) {

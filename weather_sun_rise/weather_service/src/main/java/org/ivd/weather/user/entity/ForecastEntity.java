@@ -20,16 +20,16 @@ public class ForecastEntity{
     @Column(name = "dateforecast")
     private Date dateForecast;
     @NotNull
-    @Column(name = "city")
+    @Column(name = "city", length = 100)
     private String city;
     @NotNull
-    @Column(name = "hightemp")
+    @Column(name = "hightemp", length = 10)
     private String highTemp;
     @NotNull
-    @Column(name = "lowtemp")
+    @Column(name = "lowtemp", length = 10)
     private String lowTemp;
     @NotNull
-    @Column(name = "description")
+    @Column(name = "description", length = 50)
     private String description;
 
     public ForecastEntity(Date dateForecast, String city, String highTemp, String lowTemp, String description) {
@@ -87,6 +87,7 @@ public class ForecastEntity{
         this.description = description;
     }
 
+    @Override
     public String toString() {
         return "\nid: " + id +
                 "\ncity: " + city +

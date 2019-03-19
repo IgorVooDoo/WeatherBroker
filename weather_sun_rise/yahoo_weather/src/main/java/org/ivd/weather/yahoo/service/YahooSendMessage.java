@@ -1,6 +1,5 @@
 package org.ivd.weather.yahoo.service;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.ivd.weather.error.exception.WeatherException;
 import org.ivd.weather.tools.model.Forecast;
@@ -13,8 +12,8 @@ import javax.annotation.Resource;
 import javax.crypto.Mac;
 import javax.crypto.spec.SecretKeySpec;
 import javax.enterprise.context.RequestScoped;
-import javax.jms.*;
 import javax.jms.Queue;
+import javax.jms.*;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -25,13 +24,19 @@ import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
 import java.util.*;
 
-
+/**
+ * {@inheritDoc}
+ */
 @RequestScoped
 public class YahooSendMessage implements IYahooSendMessage {
     private final Logger LOG = LoggerFactory.getLogger(YahooSendMessage.class);
 
+    private final static String consumerKey = "dj0yJmk9S3JuM2xQWTV5TWNlJnM9Y29uc3VtZXJzZWNyZXQmc3Y9MCZ4PWM4";
+    private final static String consumerSecret = "72cc6743746771389325530d0cb5cacd495f32ad";
+    private final static String url = "https://weather-ydn-yql.media.yahoo.com/forecastrss";
+
     private static final String JMS_QUEUE_WEATHER = "java:jboss/queue/weatherQueue";
-    private static final String JMS_CONNECTION_FACTORY_JNDI = "java:comp/DefaultJMSConnectionFactory";//"java:jboss/DefaultJMSConnectionFactory";
+    private static final String JMS_CONNECTION_FACTORY_JNDI = "java:comp/DefaultJMSConnectionFactory";
 
     @Resource(name = JMS_QUEUE_WEATHER)
     private Queue queue;
@@ -41,9 +46,9 @@ public class YahooSendMessage implements IYahooSendMessage {
 
     private ObjectMapper objectMapper = new ObjectMapper();
 
-    public YahooSendMessage() {
-    }
-
+    /**
+     * {@inheritDoc}
+     */
     public void createAndSendMessage(String city) throws WeatherException {
         try {
             if (!city.isEmpty()) {
@@ -62,7 +67,6 @@ public class YahooSendMessage implements IYahooSendMessage {
         } catch (IOException ex) {
             throw new WeatherException("Ошибки в преобразовании форматов");
         }
-
     }
 
     private YahooResult getResultYahoo(String city) throws IOException, WeatherException {
@@ -74,23 +78,29 @@ public class YahooSendMessage implements IYahooSendMessage {
         HttpURLConnection con = (HttpURLConnection) obj.openConnection();
         con.setRequestMethod("GET");
         con.setRequestProperty("Authorization", authorizationLine);
+        String response = getResponseString(con);
+        con.disconnect();
+        return objectMapper.readValue(response, YahooResult.class);
+    }
 
-        BufferedReader in = new BufferedReader(new InputStreamReader(con.getInputStream()));
-        String inputLine;
+
+    private String getResponseString(HttpURLConnection con) throws WeatherException {
         StringBuilder response = new StringBuilder();
-
-        while ((inputLine = in.readLine()) != null) {
-            response.append(inputLine);
+        try {
+            BufferedReader in = new BufferedReader(new InputStreamReader(con.getInputStream()));
+            String inputLine;
+            while ((inputLine = in.readLine()) != null) {
+                response.append(inputLine);
+            }
+            in.close();
+        } catch (IOException ex) {
+            throw new WeatherException("Ошибка преобразования ответа", ex);
         }
-        in.close();
 
-        return objectMapper.readValue(response.toString(), YahooResult.class);
+        return response.toString();
     }
 
     private String getAuthorizationString(String city) throws IOException, WeatherException {
-        final String consumerKey = "dj0yJmk9S3JuM2xQWTV5TWNlJnM9Y29uc3VtZXJzZWNyZXQmc3Y9MCZ4PWM4";
-        final String consumerSecret = "72cc6743746771389325530d0cb5cacd495f32ad";
-        final String url = "https://weather-ydn-yql.media.yahoo.com/forecastrss";
 
         long timestamp = new Date().getTime() / 1000;
         byte[] nonce = new byte[32];

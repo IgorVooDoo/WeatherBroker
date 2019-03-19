@@ -1,5 +1,6 @@
 package org.ivd.weather.user.dao;
 
+import org.ivd.weather.error.exception.WeatherException;
 import org.ivd.weather.user.entity.ForecastEntity;
 import org.springframework.stereotype.Repository;
 
@@ -16,9 +17,12 @@ public class ForecastDao implements IForecastDao {
     @PersistenceContext
     private EntityManager em;
 
-    public ForecastEntity findByCityDate(Date date, String city) {
+    /**
+     * {@inheritDoc}
+     */
+    public ForecastEntity findByCityDate(Date date, String city) throws WeatherException {
         if (date == null || city.isEmpty()) {
-            throw new RuntimeException("Отсутствует значение даты или города");
+            throw new WeatherException("Отсутствует значение даты или города");
         }
         CriteriaBuilder criteriaBuilder = em.getCriteriaBuilder();
         CriteriaQuery<ForecastEntity> criteriaQuery = criteriaBuilder.createQuery(ForecastEntity.class);

@@ -1,6 +1,7 @@
 package org.ivd.weather.db.dao;
 
 import org.ivd.weather.db.entity.ForecastEntity;
+import org.ivd.weather.error.exception.WeatherException;
 
 import javax.enterprise.context.RequestScoped;
 import javax.persistence.EntityManager;
@@ -20,16 +21,25 @@ public class ForecastDao implements IForecastDao {
     public ForecastDao() {
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void save(ForecastEntity entity) {
         em.persist(entity);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void update(ForecastEntity entity) {
         em.merge(entity);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public boolean isForecastEmpty(String city, Date date) {
         javax.persistence.Query query = em.createQuery(
@@ -41,9 +51,12 @@ public class ForecastDao implements IForecastDao {
         return count == 0;
     }
 
-    public ForecastEntity findByCityAndDate(String city, Date date) {
+    /**
+     * {@inheritDoc}
+     */
+    public ForecastEntity findByCityAndDate(String city, Date date) throws WeatherException {
         if (date == null || city.isEmpty()) {
-            throw new RuntimeException("Отсутствует значение даты или города");
+            throw new WeatherException("Отсутствует значение даты или города");
         }
         CriteriaBuilder criteriaBuilder = em.getCriteriaBuilder();
         CriteriaQuery<ForecastEntity> criteriaQuery = criteriaBuilder.createQuery(ForecastEntity.class);

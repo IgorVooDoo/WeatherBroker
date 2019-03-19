@@ -8,11 +8,13 @@ import java.io.IOException;
  * Сервис для сохранения данных в базу
  */
 public interface IForecastService {
+
     /**
      * Метод сохранения данных о погоде
      *
      * @param msg JSON прогноза погоды
-     * @throws Exception Исключение
+     * @throws WeatherException Обрабатываемое исключение
+     * @throws IOException      Обрабатываемое исключение
      */
     void save(String msg) throws WeatherException, IOException;
 

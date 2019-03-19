@@ -40,7 +40,6 @@ public class JmsReceiverCity implements MessageListener {
      *
      * @param message В параметре хранится название города
      */
-
     @Override
     public void onMessage(Message message) {
         String city;

@@ -12,6 +12,7 @@ import javax.jms.JMSException;
 import javax.jms.Message;
 import javax.jms.MessageListener;
 import javax.jms.TextMessage;
+import java.io.IOException;
 
 /**
  * Класс для получения JMS сообщений из очереди прогноза погоды,
@@ -46,7 +47,7 @@ public class JmsReceiverForecast implements MessageListener {
 
             service.save(data);
             LOG.info("message -> {}", data);
-        } catch (JMSException | WeatherException ex) {
+        } catch (JMSException | IOException| WeatherException ex) {
             throw new RuntimeException("JmsReceiverForecast (JMSException) -> ", ex);
         }
     }

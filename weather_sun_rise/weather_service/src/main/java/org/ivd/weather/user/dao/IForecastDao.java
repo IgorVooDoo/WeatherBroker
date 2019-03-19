@@ -1,6 +1,7 @@
 package org.ivd.weather.user.dao;
 
 
+import org.ivd.weather.error.exception.WeatherException;
 import org.ivd.weather.user.entity.ForecastEntity;
 
 import java.util.Date;
@@ -16,5 +17,5 @@ public interface IForecastDao {
      * @param city Город
      * @return ForecastEntity
      */
-    ForecastEntity findByCityDate(Date date, String city);
+    ForecastEntity findByCityDate(Date date, String city) throws WeatherException;
 }

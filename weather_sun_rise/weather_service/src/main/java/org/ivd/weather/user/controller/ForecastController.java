@@ -25,13 +25,19 @@ import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 @RequestMapping(value = "/api", produces = APPLICATION_JSON_VALUE)
 public class ForecastController {
     private final Logger LOG = LoggerFactory.getLogger(ForecastController.class);
-    private IForecastService service;
+    private final IForecastService service;
 
     @Autowired
     public ForecastController(IForecastService service) {
         this.service = service;
     }
 
+    /**
+     * Запрос предоставляющий начальный данные для заполнения
+     *
+     * @param req Объект запроса
+     * @return ModelAndView
+     */
     @RequestMapping(value = "/weather", method = RequestMethod.GET)
     public ModelAndView getForecastReq(@ModelAttribute("data") ForecastReq req) {
         ModelAndView mv = new ModelAndView();
@@ -43,10 +49,17 @@ public class ForecastController {
     }
 
     @ModelAttribute("data")
-    public ForecastReq createFilter() {
+    protected ForecastReq createFilter() {
         return new ForecastReq();
     }
 
+    /**
+     * В данном запросе принимаем название города и дату
+     * возвращаем объект погоды
+     *
+     * @param req Объект запроса
+     * @return ModelAndView
+     */
     @RequestMapping(value = "/weather/submit", method = RequestMethod.GET)
     public ModelAndView getForecast(@ModelAttribute("data") ForecastReq req) {
         ModelAndView mv = new ModelAndView();
@@ -61,10 +74,5 @@ public class ForecastController {
             mv.addObject("errorView",new ErrorView(ex.getMessage()));
         }
         return mv;
-    }
-
-    @RequestMapping(value = "ping", method = RequestMethod.GET)
-    public String ping() {
-        return "index";
     }
 }

@@ -1,5 +1,6 @@
 package org.ivd.weather.user.service;
 
+import org.ivd.weather.error.exception.WeatherException;
 import org.ivd.weather.user.dao.ForecastDao;
 import org.ivd.weather.user.entity.ForecastEntity;
 import org.ivd.weather.user.model.ForecastReq;
@@ -18,10 +19,13 @@ public class ForecastService implements IForecastService {
         this.dao = dao;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Transactional
-    public ForecastView getForecastByCityAndDate(ForecastReq req) {
+    public ForecastView getForecastByCityAndDate(ForecastReq req) throws WeatherException {
         if (req.getDate() == null || req.getCity().isEmpty()) {
-            throw new RuntimeException("Отсутствует значение даты или города");
+            throw new WeatherException("Отсутствует значение даты или города");
         }
         ForecastEntity entity = dao.findByCityDate(req.getDate(), req.getCity());
         return generateViewFromEntity(entity);

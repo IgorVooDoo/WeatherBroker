@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import org.ivd.weather.db.dao.IForecastDao;
 import org.ivd.weather.db.entity.ForecastEntity;
 import org.ivd.weather.error.exception.WeatherException;
+
 import org.ivd.weather.tools.model.Forecast;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -28,6 +29,9 @@ public class ForecastService implements IForecastService {
 
     public ForecastService(){}
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     @Transactional
     public void save(String msg) throws WeatherException, IOException {
