@@ -6,7 +6,8 @@ import org.slf4j.LoggerFactory;
 
 import javax.annotation.Resource;
 import javax.enterprise.context.RequestScoped;
-import javax.jms.ConnectionFactory;
+import javax.inject.Inject;
+import javax.jms.JMSConnectionFactory;
 import javax.jms.JMSContext;
 import javax.jms.JMSProducer;
 import javax.jms.Queue;
@@ -24,8 +25,9 @@ public class JmsSenderCity {
     @Resource(name = JMS_QUEUE_CITY)
     private Queue queue;
 
-    @Resource(name = JMS_CONNECTION_FACTORY_JNDI)
-    private ConnectionFactory connection;
+    @Inject
+    @JMSConnectionFactory(JMS_CONNECTION_FACTORY_JNDI)
+    private JMSContext context;
 
     /**
      * Создание и отправка сообщения с названием города
@@ -37,7 +39,6 @@ public class JmsSenderCity {
             throw new WeatherException("Название города отсутствует");
         }
         try {
-            JMSContext context = connection.createContext();
             JMSProducer producer = context.createProducer();
             producer.send(queue, msg);
             LOG.info("JmsSenderCity (sendMessage)-> {}", msg);
