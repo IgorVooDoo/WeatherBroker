@@ -6,6 +6,7 @@ import org.ivd.weather.db.entity.ForecastEntity;
 import org.ivd.weather.error.exception.WeatherException;
 
 import org.ivd.weather.tools.model.Forecast;
+import org.ivd.weather.tools.service.CheckService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -19,6 +20,7 @@ import java.util.Date;
 public class ForecastService implements IForecastService {
     private final Logger LOG = LoggerFactory.getLogger(ForecastService.class);
     private ObjectMapper objectMapper = new ObjectMapper();
+    private CheckService check = new CheckService();
 
     private IForecastDao dao;
 
@@ -35,7 +37,7 @@ public class ForecastService implements IForecastService {
     @Override
     @Transactional
     public void save(String msg) throws WeatherException, IOException {
-        if (msg.isEmpty()) {
+        if (check.isNullOrEmpty(msg)) {
             throw new WeatherException("Пустое сообщение");
         }
         Forecast forecast = objectMapper.readValue(msg, Forecast.class);

@@ -128,6 +128,4 @@ public class YahooSendMessage implements IYahooSendMessage {
         rand.nextBytes(nonce);
         return new String(nonce).replaceAll("\\W", "");
     }
-
-
 }

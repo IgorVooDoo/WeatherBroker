@@ -44,7 +44,6 @@ public class JmsReceiverForecast implements MessageListener {
         String data;
         try {
             data = ((TextMessage) message).getText();
-
             service.save(data);
             LOG.info("message -> {}", data);
         } catch (JMSException | IOException| WeatherException ex) {

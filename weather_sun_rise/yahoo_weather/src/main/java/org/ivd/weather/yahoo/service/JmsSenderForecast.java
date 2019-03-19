@@ -34,6 +34,12 @@ public class JmsSenderForecast {
 
     private ObjectMapper objectMapper = new ObjectMapper();
 
+    /**
+     * Метод отправки сообщений
+     *
+     * @param result YahooResult
+     * @throws WeatherException Исключение
+     */
     public void sendMessage(YahooResult result) throws WeatherException {
         if (result != null) {
             try {
