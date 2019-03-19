@@ -15,7 +15,6 @@ import javax.jms.TextMessage;
 /**
  * Класс забирающий из JMS очереди название города
  */
-
 @MessageDriven(name = "JmsReceiverCity", activationConfig = {
         @ActivationConfigProperty(propertyName = "destinationLookup", propertyValue = "java:jboss/queue/cityQueue"),
         @ActivationConfigProperty(propertyName = "destinationType", propertyValue = "javax.jms.Queue"),
@@ -32,6 +31,9 @@ public class JmsReceiverCity implements MessageListener {
         this.yahooSend = yahooSend;
     }
 
+    /**
+     * Обязательный конструктор без параметров
+     */
     public JmsReceiverCity() {
     }
 

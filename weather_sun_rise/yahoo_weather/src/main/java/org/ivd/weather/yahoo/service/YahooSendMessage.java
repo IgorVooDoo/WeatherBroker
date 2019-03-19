@@ -12,6 +12,7 @@ import javax.annotation.Resource;
 import javax.crypto.Mac;
 import javax.crypto.spec.SecretKeySpec;
 import javax.enterprise.context.RequestScoped;
+import javax.inject.Inject;
 import javax.jms.Queue;
 import javax.jms.*;
 import java.io.BufferedReader;
@@ -41,8 +42,8 @@ public class YahooSendMessage implements IYahooSendMessage {
     @Resource(name = JMS_QUEUE_WEATHER)
     private Queue queue;
 
-    @Resource(name = JMS_CONNECTION_FACTORY_JNDI)
-    private ConnectionFactory connection;
+    @Inject @JMSConnectionFactory(JMS_CONNECTION_FACTORY_JNDI)
+    private JMSContext context;
 
     private ObjectMapper objectMapper = new ObjectMapper();
 
@@ -50,19 +51,18 @@ public class YahooSendMessage implements IYahooSendMessage {
      * {@inheritDoc}
      */
     public void createAndSendMessage(String city) throws WeatherException {
+        if (city.isEmpty()) {
+            throw new WeatherException("Наименование города не может быть NULL");
+        }
+
         try {
-            if (!city.isEmpty()) {
-                YahooResult result = getResultYahoo(city);
-                JMSContext context = connection.createContext();
-                JMSProducer producer = context.createProducer().setDeliveryMode(DeliveryMode.PERSISTENT);
-                List<Forecast> listForecast = getForecastForSend(result);
-                for (Forecast item : listForecast) {
-                    String message = objectMapper.writeValueAsString(item);
-                    producer.send(queue, message);
-                    LOG.info("Send message: {}", message);
-                }
-            } else {
-                throw new WeatherException("Наименование города не может быть NULL");
+            YahooResult result = getResultYahoo(city);
+            JMSProducer producer = context.createProducer().setDeliveryMode(DeliveryMode.PERSISTENT);
+            List<Forecast> listForecast = getForecastForSend(result);
+            for (Forecast item : listForecast) {
+                String message = objectMapper.writeValueAsString(item);
+                producer.send(queue, message);
+                LOG.info("Send message: {}", message);
             }
         } catch (IOException ex) {
             throw new WeatherException("Ошибки в преобразовании форматов");
