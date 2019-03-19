@@ -24,7 +24,7 @@ public class TestSendMessage {
 
     @Test(expected = Exception.class)
     public void testEmptyCity() throws Exception {
-        sendMessage.createAndSendMessage(cityEmpty);
+        sendMessage.getResultYahoo(cityEmpty);
     }
 
     /**
@@ -35,7 +35,7 @@ public class TestSendMessage {
      */
     @Test(expected = Exception.class)
     public void testNullCity() throws Exception {
-        sendMessage.createAndSendMessage(cityNull);
+        sendMessage.getResultYahoo(cityNull);
     }
 
 }

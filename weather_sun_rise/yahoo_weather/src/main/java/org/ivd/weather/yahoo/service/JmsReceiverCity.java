@@ -1,6 +1,7 @@
 package org.ivd.weather.yahoo.service;
 
 import org.ivd.weather.error.exception.WeatherException;
+import org.ivd.weather.yahoo.model.YahooResult;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -11,6 +12,7 @@ import javax.jms.JMSException;
 import javax.jms.Message;
 import javax.jms.MessageListener;
 import javax.jms.TextMessage;
+import java.io.IOException;
 
 /**
  * Класс забирающий из JMS очереди название города
@@ -25,10 +27,12 @@ public class JmsReceiverCity implements MessageListener {
     private final Logger LOG = LoggerFactory.getLogger(JmsReceiverCity.class);
 
     private YahooSendMessage yahooSend;
+    private JmsSenderForecast senderForecast;
 
     @Inject
-    public JmsReceiverCity(YahooSendMessage yahooSend) {
+    public JmsReceiverCity(YahooSendMessage yahooSend, JmsSenderForecast senderForecast) {
         this.yahooSend = yahooSend;
+        this.senderForecast = senderForecast;
     }
 
     /**
@@ -47,9 +51,10 @@ public class JmsReceiverCity implements MessageListener {
         String city;
         try {
             city = ((TextMessage) message).getText();
-            yahooSend.createAndSendMessage(city);
+            YahooResult result = yahooSend.getResultYahoo(city);
+            senderForecast.sendMessage(result);
             LOG.info("JmsReceiverCity (onMessage) - > {}", city);
-        } catch (JMSException | WeatherException ex) {
+        } catch (JMSException | IOException | WeatherException ex) {
             throw new RuntimeException("JmsReceiverCity (JMSException | IOException) -> ", ex);
         }
     }

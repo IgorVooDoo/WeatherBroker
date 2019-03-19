@@ -1,6 +1,9 @@
 package org.ivd.weather.yahoo.service;
 
 import org.ivd.weather.error.exception.WeatherException;
+import org.ivd.weather.yahoo.model.YahooResult;
+
+import java.io.IOException;
 
 /**
  * Класс получения данных о погоде от сервиса Yahoo,
@@ -14,5 +17,5 @@ public interface IYahooSendMessage {
      * @param city Название города
      * @throws Exception Исключение
      */
-    void createAndSendMessage(String city) throws WeatherException;
+    YahooResult getResultYahoo(String city) throws IOException, WeatherException;
 }

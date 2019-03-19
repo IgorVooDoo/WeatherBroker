@@ -2,19 +2,14 @@ package org.ivd.weather.yahoo.service;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.ivd.weather.error.exception.WeatherException;
-import org.ivd.weather.tools.model.Forecast;
-import org.ivd.weather.yahoo.model.YahooForecast;
+import org.ivd.weather.tools.service.CheckService;
 import org.ivd.weather.yahoo.model.YahooResult;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import javax.annotation.Resource;
 import javax.crypto.Mac;
 import javax.crypto.spec.SecretKeySpec;
 import javax.enterprise.context.RequestScoped;
-import javax.inject.Inject;
-import javax.jms.Queue;
-import javax.jms.*;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -35,41 +30,16 @@ public class YahooSendMessage implements IYahooSendMessage {
     private final static String consumerKey = "dj0yJmk9S3JuM2xQWTV5TWNlJnM9Y29uc3VtZXJzZWNyZXQmc3Y9MCZ4PWM4";
     private final static String consumerSecret = "72cc6743746771389325530d0cb5cacd495f32ad";
     private final static String url = "https://weather-ydn-yql.media.yahoo.com/forecastrss";
-
-    private static final String JMS_QUEUE_WEATHER = "java:jboss/queue/weatherQueue";
-    private static final String JMS_CONNECTION_FACTORY_JNDI = "java:comp/DefaultJMSConnectionFactory";
-
-    @Resource(name = JMS_QUEUE_WEATHER)
-    private Queue queue;
-
-    @Inject @JMSConnectionFactory(JMS_CONNECTION_FACTORY_JNDI)
-    private JMSContext context;
-
     private ObjectMapper objectMapper = new ObjectMapper();
+    private CheckService check = new CheckService();
 
     /**
      * {@inheritDoc}
      */
-    public void createAndSendMessage(String city) throws WeatherException {
-        if (city.isEmpty()) {
+    public YahooResult getResultYahoo(String city) throws IOException, WeatherException {
+        if (check.isNullOrEmpty(city)) {
             throw new WeatherException("Наименование города не может быть NULL");
         }
-
-        try {
-            YahooResult result = getResultYahoo(city);
-            JMSProducer producer = context.createProducer().setDeliveryMode(DeliveryMode.PERSISTENT);
-            List<Forecast> listForecast = getForecastForSend(result);
-            for (Forecast item : listForecast) {
-                String message = objectMapper.writeValueAsString(item);
-                producer.send(queue, message);
-                LOG.info("Send message: {}", message);
-            }
-        } catch (IOException ex) {
-            throw new WeatherException("Ошибки в преобразовании форматов");
-        }
-    }
-
-    private YahooResult getResultYahoo(String city) throws IOException, WeatherException {
         String url = "https://weather-ydn-yql.media.yahoo.com/forecastrss?location=" + city + "&format=json&u=c";
         String authorizationLine = getAuthorizationString(city);
         LOG.info("authorizationLine - > {}", authorizationLine);
@@ -83,31 +53,39 @@ public class YahooSendMessage implements IYahooSendMessage {
         return objectMapper.readValue(response, YahooResult.class);
     }
 
-
     private String getResponseString(HttpURLConnection con) throws WeatherException {
         StringBuilder response = new StringBuilder();
-        try {
-            BufferedReader in = new BufferedReader(new InputStreamReader(con.getInputStream()));
+        try (BufferedReader in = new BufferedReader(new InputStreamReader(con.getInputStream()))) {
             String inputLine;
             while ((inputLine = in.readLine()) != null) {
                 response.append(inputLine);
             }
-            in.close();
         } catch (IOException ex) {
             throw new WeatherException("Ошибка преобразования ответа", ex);
         }
-
         return response.toString();
     }
 
     private String getAuthorizationString(String city) throws IOException, WeatherException {
 
         long timestamp = new Date().getTime() / 1000;
-        byte[] nonce = new byte[32];
-        Random rand = new Random();
-        rand.nextBytes(nonce);
-        String oauthNonce = new String(nonce).replaceAll("\\W", "");
 
+        String oauthNonce = getOAuthNonce();
+
+        String signatureString = getSignatureString(oauthNonce, timestamp, city);
+
+        String signature = getSignature(signatureString);
+
+        return "OAuth " +
+                "oauth_consumer_key=\"" + consumerKey + "\"," +
+                "oauth_nonce=\"" + oauthNonce + "\"," +
+                "oauth_timestamp=\"" + timestamp + "\"," +
+                "oauth_signature_method=\"HMAC-SHA1\"," +
+                "oauth_signature=\"" + signature + "\"," +
+                "oauth_version=\"1.0\"";
+    }
+
+    private String getSignatureString(String oauthNonce, long timestamp, String city) throws IOException {
         List<String> parameters = new ArrayList<>();
         parameters.add("oauth_consumer_key=" + consumerKey);
         parameters.add("oauth_nonce=" + oauthNonce);
@@ -121,48 +99,35 @@ public class YahooSendMessage implements IYahooSendMessage {
         Collections.sort(parameters);
 
         StringBuilder parametersList = new StringBuilder();
+
         for (int i = 0; i < parameters.size(); i++) {
             parametersList.append((i > 0) ? "&" : "").append(parameters.get(i));
         }
 
-        String signatureString = "GET&" +
+        return "GET&" +
                 URLEncoder.encode(url, "UTF-8") + "&" +
                 URLEncoder.encode(parametersList.toString(), "UTF-8");
+    }
 
-        String signature;
+    private String getSignature(String signatureString) throws WeatherException {
         try {
             SecretKeySpec signingKey = new SecretKeySpec((consumerSecret + "&").getBytes(), "HmacSHA1");
             Mac mac = Mac.getInstance("HmacSHA1");
             mac.init(signingKey);
             byte[] rawHMAC = mac.doFinal(signatureString.getBytes());
             Base64.Encoder encoder = Base64.getEncoder();
-            signature = encoder.encodeToString(rawHMAC);
+            return encoder.encodeToString(rawHMAC);
         } catch (NoSuchAlgorithmException | InvalidKeyException e) {
             throw new WeatherException("YahooSendMessage (getAuthorizationString()) ->", e);
         }
-
-        return "OAuth " +
-                "oauth_consumer_key=\"" + consumerKey + "\"," +
-                "oauth_nonce=\"" + oauthNonce + "\"," +
-                "oauth_timestamp=\"" + timestamp + "\"," +
-                "oauth_signature_method=\"HMAC-SHA1\"," +
-                "oauth_signature=\"" + signature + "\"," +
-                "oauth_version=\"1.0\"";
     }
 
-    private List<Forecast> getForecastForSend(YahooResult result) {
-        List<Forecast> listForecast = new ArrayList<>();
-        YahooForecast[] arrYahooForecast = result.getForecasts();
-
-        for (YahooForecast item : arrYahooForecast) {
-            Forecast send = new Forecast();
-            send.setCity(result.getLocation().getCity());
-            send.setDate(item.getDate());
-            send.setHigh(item.getHigh());
-            send.setLow(item.getLow());
-            send.setText(item.getText());
-            listForecast.add(send);
-        }
-        return listForecast;
+    private String getOAuthNonce() {
+        byte[] nonce = new byte[32];
+        Random rand = new Random();
+        rand.nextBytes(nonce);
+        return new String(nonce).replaceAll("\\W", "");
     }
+
+
 }
