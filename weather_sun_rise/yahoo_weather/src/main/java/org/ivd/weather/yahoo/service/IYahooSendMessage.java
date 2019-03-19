@@ -1,4 +1,7 @@
 package org.ivd.weather.yahoo.service;
+
+import org.ivd.weather.error.exception.WeatherException;
+
 /**
  * Класс получения данных о погоде от сервиса Yahoo,
  * отправка данный в JMS очередь
@@ -11,5 +14,5 @@ public interface IYahooSendMessage {
      * @param city Название города
      * @throws Exception Исключение
      */
-    void createAndSendMessage(String city) throws Exception;
+    void createAndSendMessage(String city) throws WeatherException;
 }

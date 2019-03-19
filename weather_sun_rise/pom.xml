@@ -15,6 +15,7 @@
         <module>db_service</module>
         <module>weather_service</module>
         <module>common_tools</module>
+        <module>error</module>
     </modules>
 
     <properties>
@@ -70,7 +71,6 @@
             <version>${easymock.version}</version>
             <scope>test</scope>
         </dependency>
-
 
     </dependencies>
     <build>

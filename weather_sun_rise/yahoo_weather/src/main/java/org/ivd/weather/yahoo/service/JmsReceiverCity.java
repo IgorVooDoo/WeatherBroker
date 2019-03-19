@@ -1,5 +1,6 @@
 package org.ivd.weather.yahoo.service;
 
+import org.ivd.weather.error.exception.WeatherException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -10,7 +11,6 @@ import javax.jms.JMSException;
 import javax.jms.Message;
 import javax.jms.MessageListener;
 import javax.jms.TextMessage;
-import java.io.IOException;
 
 /**
  * Класс забирающий из JMS очереди название города
@@ -48,10 +48,8 @@ public class JmsReceiverCity implements MessageListener {
             city = ((TextMessage) message).getText();
             yahooSend.createAndSendMessage(city);
             LOG.info("JmsReceiverCity (onMessage) - > {}", city);
-        } catch (JMSException | IOException ex) {
+        } catch (JMSException | WeatherException ex) {
             throw new RuntimeException("JmsReceiverCity (JMSException | IOException) -> ", ex);
-        } catch (Exception ex) {
-            throw new RuntimeException("JmsReceiverCity (Exception) -> ", ex);
         }
     }
 }

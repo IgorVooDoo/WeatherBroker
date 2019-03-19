@@ -1,5 +1,6 @@
 package org.ivd.weather.user.controller;
 
+import org.ivd.weather.error.exception.WeatherException;
 import org.ivd.weather.user.model.ForecastReq;
 import org.ivd.weather.user.service.IForecastService;
 import org.ivd.weather.user.view.ErrorView;
@@ -55,7 +56,7 @@ public class ForecastController {
             mv.setViewName("forecast");
             forecastView = service.getForecastByCityAndDate(req);
             mv.addObject("forecastView", forecastView);
-        } catch (Exception ex) {
+        } catch (WeatherException ex) {
             mv.setViewName("error");
             mv.addObject("errorView",new ErrorView(ex.getMessage()));
         }

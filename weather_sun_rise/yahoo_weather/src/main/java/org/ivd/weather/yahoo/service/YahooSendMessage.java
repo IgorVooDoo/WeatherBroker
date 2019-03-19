@@ -1,6 +1,8 @@
 package org.ivd.weather.yahoo.service;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.ivd.weather.error.exception.WeatherException;
 import org.ivd.weather.tools.model.Forecast;
 import org.ivd.weather.yahoo.model.YahooForecast;
 import org.ivd.weather.yahoo.model.YahooResult;
@@ -19,6 +21,8 @@ import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.net.URLEncoder;
+import java.security.InvalidKeyException;
+import java.security.NoSuchAlgorithmException;
 import java.util.*;
 
 
@@ -40,24 +44,28 @@ public class YahooSendMessage implements IYahooSendMessage {
     public YahooSendMessage() {
     }
 
-    public void createAndSendMessage(String city) throws Exception {
-
-        if (!city.isEmpty()) {
-            YahooResult result = getResultYahoo(city);
-            JMSContext context = connection.createContext();
-            JMSProducer producer = context.createProducer().setDeliveryMode(DeliveryMode.PERSISTENT);
-            List<Forecast> listForecast = getForecastForSend(result);
-            for (Forecast item : listForecast) {
-                String message = objectMapper.writeValueAsString(item);
-                producer.send(queue, message);
-                LOG.info("Send message: {}", message);
+    public void createAndSendMessage(String city) throws WeatherException {
+        try {
+            if (!city.isEmpty()) {
+                YahooResult result = getResultYahoo(city);
+                JMSContext context = connection.createContext();
+                JMSProducer producer = context.createProducer().setDeliveryMode(DeliveryMode.PERSISTENT);
+                List<Forecast> listForecast = getForecastForSend(result);
+                for (Forecast item : listForecast) {
+                    String message = objectMapper.writeValueAsString(item);
+                    producer.send(queue, message);
+                    LOG.info("Send message: {}", message);
+                }
+            } else {
+                throw new WeatherException("Наименование города не может быть NULL");
             }
-        } else {
-            throw new Exception("Наименование города не может быть NULL");
+        } catch (IOException ex) {
+            throw new WeatherException("Ошибки в преобразовании форматов");
         }
+
     }
 
-    private YahooResult getResultYahoo(String city) throws IOException {
+    private YahooResult getResultYahoo(String city) throws IOException, WeatherException {
         String url = "https://weather-ydn-yql.media.yahoo.com/forecastrss?location=" + city + "&format=json&u=c";
         String authorizationLine = getAuthorizationString(city);
         LOG.info("authorizationLine - > {}", authorizationLine);
@@ -79,7 +87,7 @@ public class YahooSendMessage implements IYahooSendMessage {
         return objectMapper.readValue(response.toString(), YahooResult.class);
     }
 
-    private String getAuthorizationString(String city) throws IOException {
+    private String getAuthorizationString(String city) throws IOException, WeatherException {
         final String consumerKey = "dj0yJmk9S3JuM2xQWTV5TWNlJnM9Y29uc3VtZXJzZWNyZXQmc3Y9MCZ4PWM4";
         final String consumerSecret = "72cc6743746771389325530d0cb5cacd495f32ad";
         final String url = "https://weather-ydn-yql.media.yahoo.com/forecastrss";
@@ -119,8 +127,8 @@ public class YahooSendMessage implements IYahooSendMessage {
             byte[] rawHMAC = mac.doFinal(signatureString.getBytes());
             Base64.Encoder encoder = Base64.getEncoder();
             signature = encoder.encodeToString(rawHMAC);
-        } catch (Exception e) {
-            throw new RuntimeException("YahooSendMessage (getAuthorizationString()) ->", e);
+        } catch (NoSuchAlgorithmException | InvalidKeyException e) {
+            throw new WeatherException("YahooSendMessage (getAuthorizationString()) ->", e);
         }
 
         return "OAuth " +

@@ -3,6 +3,7 @@ package org.ivd.weather.db.service;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.ivd.weather.db.dao.IForecastDao;
 import org.ivd.weather.db.entity.ForecastEntity;
+import org.ivd.weather.error.exception.WeatherException;
 import org.ivd.weather.tools.model.Forecast;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -10,6 +11,7 @@ import org.slf4j.LoggerFactory;
 import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
 import javax.transaction.Transactional;
+import java.io.IOException;
 import java.util.Date;
 
 @RequestScoped
@@ -28,9 +30,9 @@ public class ForecastService implements IForecastService {
 
     @Override
     @Transactional
-    public void save(String msg) throws Exception {
+    public void save(String msg) throws WeatherException, IOException {
         if (msg.isEmpty()) {
-            throw new Exception("Пустое сообщение");
+            throw new WeatherException("Пустое сообщение");
         }
         Forecast forecast = objectMapper.readValue(msg, Forecast.class);
         Date date = getDateFromString(forecast.getDate());

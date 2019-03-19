@@ -1,6 +1,7 @@
 package org.ivd.weather.db;
 
 import org.ivd.weather.db.service.IForecastService;
+import org.ivd.weather.error.exception.WeatherException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -45,10 +46,8 @@ public class JmsReceiverForecast implements MessageListener {
 
             service.save(data);
             LOG.info("message -> {}", data);
-        } catch (JMSException ex) {
+        } catch (JMSException | WeatherException ex) {
             throw new RuntimeException("JmsReceiverForecast (JMSException) -> ", ex);
-        } catch (Exception ex) {
-            throw new RuntimeException("JmsReceiverForecast (Exception) -> ", ex);
         }
     }
 }

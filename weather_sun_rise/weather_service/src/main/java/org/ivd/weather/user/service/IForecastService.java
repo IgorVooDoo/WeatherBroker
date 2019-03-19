@@ -1,5 +1,6 @@
 package org.ivd.weather.user.service;
 
+import org.ivd.weather.error.exception.WeatherException;
 import org.ivd.weather.user.model.ForecastReq;
 import org.ivd.weather.user.view.ForecastView;
 
@@ -12,8 +13,8 @@ public interface IForecastService {
      *
      * @param req Объект запроса
      * @return ForecastView
-     * @throws Exception Исключение
+     * @throws WeatherException Исключение
      */
-    ForecastView getForecastByCityAndDate(ForecastReq req) throws Exception;
+    ForecastView getForecastByCityAndDate(ForecastReq req) throws WeatherException;
 
 }

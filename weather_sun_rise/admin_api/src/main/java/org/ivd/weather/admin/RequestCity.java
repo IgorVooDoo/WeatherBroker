@@ -1,5 +1,6 @@
 package org.ivd.weather.admin;
 
+import org.ivd.weather.error.exception.WeatherException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -27,7 +28,11 @@ public class RequestCity extends HttpServlet {
                 .forward(req, resp);
         String city = req.getParameter("city");
         if (!city.isEmpty()) {
-            senderCity.sendMessage(city);
+            try {
+                senderCity.sendMessage(city);
+            } catch (WeatherException e) {
+                throw new ServletException(e.getMessage());
+            }
             LOG.info("RequestCity (doGet) - > {}", city);
         }
     }
