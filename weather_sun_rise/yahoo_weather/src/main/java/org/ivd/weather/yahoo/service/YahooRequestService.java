@@ -24,8 +24,8 @@ import java.util.*;
  * {@inheritDoc}
  */
 @RequestScoped
-public class YahooSendMessage implements IYahooSendMessage {
-    private final Logger LOG = LoggerFactory.getLogger(YahooSendMessage.class);
+public class YahooRequestService implements IYahooSendMessage {
+    private final Logger LOG = LoggerFactory.getLogger(YahooRequestService.class);
 
     private final static String consumerKey = "dj0yJmk9S3JuM2xQWTV5TWNlJnM9Y29uc3VtZXJzZWNyZXQmc3Y9MCZ4PWM4";
     private final static String consumerSecret = "72cc6743746771389325530d0cb5cacd495f32ad";
@@ -118,7 +118,7 @@ public class YahooSendMessage implements IYahooSendMessage {
             Base64.Encoder encoder = Base64.getEncoder();
             return encoder.encodeToString(rawHMAC);
         } catch (NoSuchAlgorithmException | InvalidKeyException e) {
-            throw new WeatherException("YahooSendMessage (getAuthorizationString()) ->", e);
+            throw new WeatherException("YahooRequestService (getAuthorizationString()) ->", e);
         }
     }
 

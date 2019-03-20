@@ -26,11 +26,11 @@ public class JmsReceiverCity implements MessageListener {
 
     private final Logger LOG = LoggerFactory.getLogger(JmsReceiverCity.class);
 
-    private YahooSendMessage yahooSend;
+    private YahooRequestService yahooSend;
     private JmsSenderForecast senderForecast;
 
     @Inject
-    public JmsReceiverCity(YahooSendMessage yahooSend, JmsSenderForecast senderForecast) {
+    public JmsReceiverCity(YahooRequestService yahooSend, JmsSenderForecast senderForecast) {
         this.yahooSend = yahooSend;
         this.senderForecast = senderForecast;
     }
