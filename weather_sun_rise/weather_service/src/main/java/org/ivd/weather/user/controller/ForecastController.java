@@ -2,7 +2,7 @@ package org.ivd.weather.user.controller;
 
 import org.ivd.weather.error.exception.WeatherException;
 import org.ivd.weather.user.model.ForecastReq;
-import org.ivd.weather.user.service.IForecastService;
+import org.ivd.weather.user.service.ForecastService;
 import org.ivd.weather.user.view.ErrorView;
 import org.ivd.weather.user.view.ForecastView;
 import org.slf4j.Logger;
@@ -25,10 +25,10 @@ import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 @RequestMapping(value = "/api", produces = APPLICATION_JSON_VALUE)
 public class ForecastController {
     private final Logger LOG = LoggerFactory.getLogger(ForecastController.class);
-    private final IForecastService service;
+    private final ForecastService service;
 
     @Autowired
-    public ForecastController(IForecastService service) {
+    public ForecastController(ForecastService service) {
         this.service = service;
     }
 

@@ -4,7 +4,7 @@ package org.ivd.weather.user;
 import org.easymock.EasyMockRule;
 import org.ivd.weather.user.config.ServiceConfig;
 import org.ivd.weather.user.controller.ForecastController;
-import org.ivd.weather.user.service.ForecastService;
+import org.ivd.weather.user.service.ForecastServiceImpl;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
@@ -36,7 +36,7 @@ public class ForecastControllerTest {
 
     private MockMvc mockMvc;
 
-    private ForecastService mockForecastService = mock(ForecastService.class);
+    private ForecastServiceImpl mockForecastService = mock(ForecastServiceImpl.class);
 
     @Before
     public void ForecastControllerTest() {

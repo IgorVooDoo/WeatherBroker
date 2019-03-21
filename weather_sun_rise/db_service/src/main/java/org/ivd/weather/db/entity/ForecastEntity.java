@@ -111,6 +111,7 @@ public class ForecastEntity{
         this.description = description;
     }
 
+    @Override
     public String toString() {
         return "\nid: " + id +
                 "\ncity: " + city +

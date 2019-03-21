@@ -1,7 +1,7 @@
 package org.ivd.weather.admin;
 
 import org.easymock.TestSubject;
-import org.ivd.weather.admin.service.JmsSenderCity;
+import org.ivd.weather.admin.service.JmsSenderCityImpl;
 import org.ivd.weather.error.exception.WeatherException;
 import org.junit.Test;
 
@@ -13,7 +13,7 @@ public class AdminApiTest {
     private String cityNull = null;
 
     @TestSubject
-    JmsSenderCity senderCity = new JmsSenderCity();
+    JmsSenderCityImpl senderCity = new JmsSenderCityImpl();
 
     /**
      * Тест на отправку пустого значения города

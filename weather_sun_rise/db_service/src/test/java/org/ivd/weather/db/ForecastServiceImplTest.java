@@ -4,8 +4,8 @@ import org.easymock.EasyMockRule;
 import org.easymock.Mock;
 import org.easymock.MockType;
 import org.easymock.TestSubject;
-import org.ivd.weather.db.dao.ForecastDao;
-import org.ivd.weather.db.service.ForecastService;
+import org.ivd.weather.db.dao.ForecastDaoImpl;
+import org.ivd.weather.db.service.ForecastServiceImpl;
 import org.junit.Rule;
 import org.junit.Test;
 
@@ -14,22 +14,22 @@ import static org.easymock.EasyMock.mock;
 /**
  * Тесты для модуля db_service
  */
-public class ForecastServiceTest {
+public class ForecastServiceImplTest {
 
     private String msgEmpty = "";
     private String msgNull = null;
 
-    public ForecastServiceTest() {
+    public ForecastServiceImplTest() {
     }
 
     @Rule
     public EasyMockRule em = new EasyMockRule(this);
 
     @Mock(MockType.NICE)
-    private ForecastDao dao = mock(ForecastDao.class);
+    private ForecastDaoImpl dao = mock(ForecastDaoImpl.class);
 
     @TestSubject
-    private ForecastService forecastService = new ForecastService(dao);
+    private ForecastServiceImpl forecastServiceImpl = new ForecastServiceImpl();
 
     /**
      * Проверка на попытку записать в базу значение NULL
@@ -38,7 +38,7 @@ public class ForecastServiceTest {
      */
     @Test(expected = Exception.class)
     public void saveNullTest() throws Exception {
-        forecastService.save(msgNull);
+        forecastServiceImpl.save(msgNull);
     }
 
     /**
@@ -48,7 +48,7 @@ public class ForecastServiceTest {
      */
     @Test(expected = Exception.class)
     public void saveEmptyTest() throws Exception {
-        forecastService.save(msgEmpty);
+        forecastServiceImpl.save(msgEmpty);
     }
 
 }

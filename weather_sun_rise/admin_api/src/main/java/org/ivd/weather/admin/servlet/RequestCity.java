@@ -1,6 +1,6 @@
 package org.ivd.weather.admin.servlet;
 
-import org.ivd.weather.admin.service.JmsSenderCity;
+import org.ivd.weather.admin.service.JmsSenderCityImpl;
 import org.ivd.weather.error.exception.WeatherException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -21,7 +21,7 @@ public class RequestCity extends HttpServlet {
     private final Logger LOG = LoggerFactory.getLogger(RequestCity.class);
 
     @Inject
-    private JmsSenderCity senderCity;
+    private JmsSenderCityImpl senderCity;
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {

@@ -26,20 +26,11 @@ public class JmsReceiverCity implements MessageListener {
 
     private final Logger LOG = LoggerFactory.getLogger(JmsReceiverCity.class);
 
+    @Inject
     private YahooRequestService yahooSend;
-    private JmsSenderForecast senderForecast;
 
     @Inject
-    public JmsReceiverCity(YahooRequestService yahooSend, JmsSenderForecast senderForecast) {
-        this.yahooSend = yahooSend;
-        this.senderForecast = senderForecast;
-    }
-
-    /**
-     * Обязательный конструктор без параметров
-     */
-    public JmsReceiverCity() {
-    }
+    private JmsSenderForecast senderForecast;
 
     /**
      * Метод разбора JMS сообщения и передача в сервис для отправки в Yahoo API

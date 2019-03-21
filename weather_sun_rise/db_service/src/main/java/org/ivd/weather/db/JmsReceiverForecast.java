@@ -1,6 +1,6 @@
 package org.ivd.weather.db;
 
-import org.ivd.weather.db.service.IForecastService;
+import org.ivd.weather.db.service.ForecastService;
 import org.ivd.weather.error.exception.WeatherException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -26,18 +26,8 @@ import java.io.IOException;
 public class JmsReceiverForecast implements MessageListener {
     private final Logger LOG = LoggerFactory.getLogger(JmsReceiverForecast.class);
 
-    private IForecastService service;
-
     @Inject
-    public JmsReceiverForecast(IForecastService service) {
-        this.service = service;
-    }
-
-    /**
-     * Обязательный конструктор без параметров
-     */
-    public JmsReceiverForecast() {
-    }
+    private ForecastService service;
 
     @Override
     public void onMessage(Message message) {

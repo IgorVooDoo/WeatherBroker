@@ -1,7 +1,7 @@
 package org.ivd.weather.yahoo;
 
 import org.easymock.TestSubject;
-import org.ivd.weather.yahoo.service.YahooRequestService;
+import org.ivd.weather.yahoo.service.YahooRequestServiceImpl;
 import org.junit.Test;
 
 /**
@@ -13,7 +13,7 @@ public class TestSendMessage {
     private String cityNull = null;
 
     @TestSubject
-    YahooRequestService sendMessage = new YahooRequestService();
+    YahooRequestServiceImpl sendMessage = new YahooRequestServiceImpl();
 
     /**
      * Проверка запроса данных о погоде при пустом значении

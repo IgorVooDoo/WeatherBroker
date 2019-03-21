@@ -38,6 +38,7 @@
         <junit.version>4.12</junit.version>
         <easymock.version>4.0.2</easymock.version>
         <spring-test.version>5.0.10.RELEASE</spring-test.version>
+        <commons-lang3.version>3.0</commons-lang3.version>
 
     </properties>
 
@@ -56,6 +57,13 @@
             <artifactId>slf4j-api</artifactId>
             <version>${slf4j-api.version}</version>
         </dependency>
+
+        <dependency>
+            <groupId>org.apache.commons</groupId>
+            <artifactId>commons-lang3</artifactId>
+            <version>${commons-lang3.version}</version>
+        </dependency>
+
 
         <!-- Test -->
         <dependency>

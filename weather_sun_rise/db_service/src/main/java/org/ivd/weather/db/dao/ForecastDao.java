@@ -3,71 +3,47 @@ package org.ivd.weather.db.dao;
 import org.ivd.weather.db.entity.ForecastEntity;
 import org.ivd.weather.error.exception.WeatherException;
 
-import javax.enterprise.context.RequestScoped;
-import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
-import javax.persistence.criteria.CriteriaBuilder;
-import javax.persistence.criteria.CriteriaQuery;
-import javax.persistence.criteria.Predicate;
-import javax.persistence.criteria.Root;
 import java.util.Date;
 
-@RequestScoped
-public class ForecastDao implements IForecastDao {
+/**
+ * Класс для связи с базой данных и дальнейших операций
+ */
+public interface ForecastDao {
+    /**
+     * Метод сохранения прогноза погоды
+     *
+     * @param entity Сущность Forecast
+     */
+    void save(ForecastEntity entity);
 
-    @PersistenceContext(unitName = "manager")
-    private EntityManager em;
-
-    public ForecastDao() {
-    }
 
     /**
-     * {@inheritDoc}
+     * Метод обновления данных о прогнозе погоды,
+     * если они уже существуют
+     *
+     * @param entity Сущность Forecast
      */
-    @Override
-    public void save(ForecastEntity entity) {
-        em.persist(entity);
-    }
+    void update(ForecastEntity entity);
 
     /**
-     * {@inheritDoc}
+     * Проверка наличия прогнозы погоды по названию города и
+     * дате
+     *
+     * @param city Название города
+     * @param date Дата
+     * @return boolean
      */
-    @Override
-    public void update(ForecastEntity entity) {
-        em.merge(entity);
-    }
+    boolean isForecastEmpty(String city, Date date);
+
 
     /**
-     * {@inheritDoc}
+     * Получение прогноза погоды для актуализации данных
+     *
+     * @param city Название города
+     * @param date Дата
+     * @return ForecastEntity
      */
-    @Override
-    public boolean isForecastEmpty(String city, Date date) {
-        javax.persistence.Query query = em.createQuery(
-                "select count(*) from ForecastEntity f where f.dateForecast =:date  and f.city =:city"
-        );
-        query.setParameter("date", date);
-        query.setParameter("city", city);
-        Long count = (Long) query.getSingleResult();
-        return count == 0;
-    }
+    ForecastEntity findByCityAndDate(String city, Date date) throws WeatherException;
 
-    /**
-     * {@inheritDoc}
-     */
-    public ForecastEntity findByCityAndDate(String city, Date date) throws WeatherException {
-        if (date == null || city.isEmpty()) {
-            throw new WeatherException("Отсутствует значение даты или города");
-        }
-        CriteriaBuilder criteriaBuilder = em.getCriteriaBuilder();
-        CriteriaQuery<ForecastEntity> criteriaQuery = criteriaBuilder.createQuery(ForecastEntity.class);
-        Root<ForecastEntity> root = criteriaQuery.from(ForecastEntity.class);
-        criteriaQuery.select(root);
-        Predicate predicate = criteriaBuilder.conjunction();
-        Predicate datePredicate = criteriaBuilder.equal(root.get("dateForecast"), date);
-        predicate = criteriaBuilder.and(predicate, datePredicate);
-        Predicate cityPredicate = criteriaBuilder.equal(root.get("city"), city);
-        predicate = criteriaBuilder.and(predicate, cityPredicate);
-        criteriaQuery.where(predicate);
-        return em.createQuery(criteriaQuery).getSingleResult();
-    }
 }
+

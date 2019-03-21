@@ -55,6 +55,7 @@ public class YahooForecast {
         this.text = text;
     }
 
+    @Override
     public String toString() {
         return "\ndate: " + date +
                 "\nhighTemp: " + high +
